@@ -39,6 +39,7 @@ public class SS_Main implements ActionListener
 //             System.out.println("At the start.");
             sendSocket = new ServerSocket(4444);
 //             System.out.println("At the start2.");
+            
         } 
         catch (IOException e) 
         {
