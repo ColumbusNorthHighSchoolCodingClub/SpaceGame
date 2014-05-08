@@ -1,4 +1,5 @@
 package src.spacegame.old;
+
 /**
  * Write a description of interface Packable here.
  * 
@@ -6,8 +7,7 @@ package src.spacegame.old;
  * @version (2_20_07)
  */
 
-public interface Packable
-{
+public interface Packable {
 	/**
 	 * The pack method converts the data from this class into a String 
 	 * for transfer over the network.

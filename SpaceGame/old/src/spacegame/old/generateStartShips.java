@@ -1,4 +1,5 @@
 package src.spacegame.old;
+
 /**
  * Write a description of class generateStartShips here.
  * 
