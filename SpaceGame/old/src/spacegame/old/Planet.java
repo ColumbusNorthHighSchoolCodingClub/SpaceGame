@@ -7,27 +7,27 @@ package src.spacegame.old;
  * @version (v.5)
  */
 
-import java.util.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.lang.*;
-import java.util.ArrayList;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.util.Random;
+import java.util.Vector;
+import javax.swing.JPanel;
 
 public class Planet implements Packable {
-	// These are the information stored by a planet
+	
 	private int controlledBy;
-	private int baseOffense;
-	private int baseDefense;
-	private int fuelCapacity;
-	private int materialCapacity;
-	private int planetType; //what "class of planet" is it?
+	private int baseOffense; //MOVED: PlanetType
+	private int baseDefense; //MOVED: PlanetType
+	private int fuelCapacity; //MOVED: PlanetType
+	private int materialCapacity; //MOVED: PlanetType
+	private int planetType; //REPLACED: ENUM PlanetType
 	
-	// private int myColor;
+	static int max_Planets = 1000; //XXX
 	
-	static int max_Planets = 1000;
 	// static ArrayList<Integer> planetChoice = new ArrayList<Integer>();
+	
 	static Image Planets[] = new Image[20];
 	// static Image largePlanets[] = new Image [20];
 	
@@ -47,9 +47,6 @@ public class Planet implements Packable {
 	
 	public static void initializePlanets() {
 	
-		// loadGraphics();  
-		//  generateWorld();  
-		
 	}
 	
 	/**
@@ -58,81 +55,81 @@ public class Planet implements Packable {
 	*/
 	public void supplyPlanet(int z) {
 	
-		if (z == 0) {
+		if(z == 0) {
 			createVeronian();
 			//  System.out.println("Veronian");
 		}
 		
-		if (z > 0 && z <= 5) {
+		if(z > 0 && z <= 5) {
 			createAdonis();
 			//   System.out.println("Adonis");
 		}
 		
-		if (z > 5 && z <= 15) {
+		if(z > 5 && z <= 15) {
 			createEris();
 			//  System.out.println("Eris");
 		}
 		
-		if (z > 5 && z <= 25) {
+		if(z > 5 && z <= 25) {
 			createFiery();
 			// System.out.println("Fiery");
 		}
 		
-		if (z > 25 && z <= 100) {
+		if(z > 25 && z <= 100) {
 			createTierran();
 			// System.out.println("Tierran");
 		}
 		
-		if (z > 100 && z <= 200) {
+		if(z > 100 && z <= 200) {
 			createThesban();
 			// System.out.println("Thesban");
 		}
 		
-		if (z > 200 && z <= 300) {
+		if(z > 200 && z <= 300) {
 			createTomeko();
 			// System.out.println("Tomeko");
 		}
 		
-		if (z > 300 && z <= 500) {
+		if(z > 300 && z <= 500) {
 			createRing();
 			//System.out.println("ring");
 		}
 		
-		if (z > 500 && z <= 515) {
+		if(z > 500 && z <= 515) {
 			createCrack();
 			// System.out.println("crack");
 		}
 		
-		if (z > 515 && z <= 530) {
+		if(z > 515 && z <= 530) {
 			createTitan();
 			// System.out.println("titan");
 		}
-		if (z > 530 && z <= 560) {
+		if(z > 530 && z <= 560) {
 			createStealth();
 			//System.out.println("stealth");
 		}
 		
-		if (z > 560 && z <= 610) {
+		if(z > 560 && z <= 610) {
 			createSpartan();
 			// System.out.println("spartan");
 		}
 		
-		if (z > 610 && z <= 655) {
+		if(z > 610 && z <= 655) {
 			createIonis();
 			// System.out.println("ionis");
 		}
 		
-		if (z > 655 && z <= 700) {
+		if(z > 655 && z <= 700) {
 			createPeyo();
 			// System.out.println("peyo");
 		}
 		
-		if (z > 700 && z <= 750) {
+		if(z > 700 && z <= 750) {
 			createRiehl();
 			// System.out.println("riehl");
 		}
 		
-		if (z > 750) {
+		if(z > 750) {
 			createSarena();
 			// System.out.println("sarena");
 		}
@@ -197,7 +194,7 @@ public class Planet implements Packable {
 		//p.getGraphics().drawImage(smallPlanets[planetType], x, y, zoomFactor*25, zoomFactor*25, i);
 		//darkgray gray lightgrey orange pink blue red black white
 		
-		if (planetType == VERONIAN) {
+		if(planetType == VERONIAN) {
 			g.drawImage(Planets[0], x + 10 * zoomFactor, y + 10 * zoomFactor, 20 * zoomFactor, 20 * zoomFactor, p);
 			//                 g.setColor(Color.orange);
 			//               g.drawOval(x+10*zoomFactor, y+10*zoomFactor, 20*zoomFactor, 20*zoomFactor);
@@ -205,7 +202,7 @@ public class Planet implements Packable {
 			//   System.out.println("type" + planetType);
 		}
 		
-		if (planetType == ERIS) {
+		if(planetType == ERIS) {
 			g.drawImage(Planets[1], x + 10 * zoomFactor, y + 10 * zoomFactor, 20 * zoomFactor, 20 * zoomFactor, p);
 			//                g.setColor(Color.blue); 
 			//              g.drawOval(x+5*zoomFactor, y+5*zoomFactor, 14*zoomFactor, 14*zoomFactor);
@@ -213,7 +210,7 @@ public class Planet implements Packable {
 			//  System.out.println("type" + planetType);
 		}
 		
-		if (planetType == TIERRAN) {
+		if(planetType == TIERRAN) {
 			g.drawImage(Planets[2], x + 10 * zoomFactor, y + 10 * zoomFactor, 20 * zoomFactor, 20 * zoomFactor, p);
 			//                g.setColor(Color.red); 
 			//              g.drawOval(x+5*zoomFactor, y+5*zoomFactor, 23*zoomFactor, 23*zoomFactor);
@@ -221,21 +218,21 @@ public class Planet implements Packable {
 			// System.out.println("type" + planetType);
 		}
 		
-		if (planetType == ADONIS) {
+		if(planetType == ADONIS) {
 			g.setColor(Color.green);
 			g.drawOval(x + 5 * zoomFactor, y + 5 * zoomFactor, 20 * zoomFactor, 20 * zoomFactor);
 			g.fillOval(x + 5 * zoomFactor, y + 5 * zoomFactor, 20 * zoomFactor, 20 * zoomFactor);
 			// System.out.println("type" + planetType);
 		}
 		
-		if (planetType == THESBAN) {
+		if(planetType == THESBAN) {
 			g.setColor(Color.magenta);
 			g.drawOval(x + 8 * zoomFactor, y + 8 * zoomFactor, 9 * zoomFactor, 9 * zoomFactor);
 			g.fillOval(x + 8 * zoomFactor, y + 8 * zoomFactor, 9 * zoomFactor, 9 * zoomFactor);
 			// System.out.println("type" + planetType);
 		}
 		
-		if (planetType == TOMEKO) {
+		if(planetType == TOMEKO) {
 			g.setColor(Color.gray);
 			g.drawOval(x + 2 * zoomFactor, y + 25 * zoomFactor, 22 * zoomFactor, 22 * zoomFactor);
 			g.fillOval(x + 2 * zoomFactor, y + 25 * zoomFactor, 22 * zoomFactor, 22 * zoomFactor);
@@ -245,20 +242,20 @@ public class Planet implements Packable {
 			//  System.out.println("type" + planetType);
 		}
 		
-		if (planetType == RING) {
+		if(planetType == RING) {
 			int moo = 1;
 			//int moo = randy.nextInt(4)+1;
-			if (moo == 1) {
+			if(moo == 1) {
 				g.setColor(Color.blue);
 			}
-			if (moo == 0) {
+			if(moo == 0) {
 				g.setColor(Color.green);
 			}
 			
-			if (moo == 2) {
+			if(moo == 2) {
 				g.setColor(Color.orange);
 			}
-			if (moo == 3) {
+			if(moo == 3) {
 				g.setColor(Color.red);
 			}
 			
@@ -266,17 +263,17 @@ public class Planet implements Packable {
 			g.fillOval(x + 25 * zoomFactor, y + 30 * zoomFactor, 10 * zoomFactor, 10 * zoomFactor);
 			
 			moo = randy.nextInt(4) + 1;
-			if (moo == 3) {
+			if(moo == 3) {
 				g.setColor(Color.blue);
 			}
-			if (moo == 2) {
+			if(moo == 2) {
 				g.setColor(Color.green);
 			}
 			
-			if (moo == 1) {
+			if(moo == 1) {
 				g.setColor(Color.orange);
 			}
-			if (moo == 0) {
+			if(moo == 0) {
 				g.setColor(Color.red);
 			}
 			
@@ -284,94 +281,94 @@ public class Planet implements Packable {
 			//  System.out.println("type" + planetType);
 		}
 		
-		if (planetType == CRACK) {
+		if(planetType == CRACK) {
 			int moo = randy.nextInt(4) + 1;
 			
-			if (moo == 1) {
+			if(moo == 1) {
 				g.setColor(Color.blue);
 			}
-			if (moo == 0) {
+			if(moo == 0) {
 				g.setColor(Color.green);
 			}
 			
-			if (moo == 2) {
+			if(moo == 2) {
 				g.setColor(Color.orange);
 			}
-			if (moo == 3) {
+			if(moo == 3) {
 				g.setColor(Color.red);
 			}
 			g.drawOval(x + 2 * zoomFactor, y + 2 * zoomFactor, 25 * zoomFactor, 25 * zoomFactor);
 			g.fillOval(x + 2 * zoomFactor, y + 2 * zoomFactor, 25 * zoomFactor, 25 * zoomFactor);
 			moo = randy.nextInt(4) + 1;
 			
-			if (moo == 1) {
+			if(moo == 1) {
 				g.setColor(Color.blue);
 			}
-			if (moo == 0) {
+			if(moo == 0) {
 				g.setColor(Color.green);
 			}
 			
-			if (moo == 2) {
+			if(moo == 2) {
 				g.setColor(Color.orange);
 			}
-			if (moo == 3) {
+			if(moo == 3) {
 				g.setColor(Color.red);
 			}
 			
 			g.drawOval(x + 5 * zoomFactor, y + 5 * zoomFactor, 20 * zoomFactor, 20 * zoomFactor);
 			moo = randy.nextInt(4) + 1;
 			
-			if (moo == 1) {
+			if(moo == 1) {
 				g.setColor(Color.blue);
 			}
-			if (moo == 0) {
+			if(moo == 0) {
 				g.setColor(Color.green);
 			}
 			
-			if (moo == 2) {
+			if(moo == 2) {
 				g.setColor(Color.orange);
 			}
-			if (moo == 3) {
+			if(moo == 3) {
 				g.setColor(Color.red);
 			}
 			g.drawOval(x + 5 * zoomFactor, y + 5 * zoomFactor, 15 * zoomFactor, 15 * zoomFactor);
 			moo = randy.nextInt(4) + 1;
 			
-			if (moo == 1) {
+			if(moo == 1) {
 				g.setColor(Color.blue);
 			}
-			if (moo == 0) {
+			if(moo == 0) {
 				g.setColor(Color.green);
 			}
 			
-			if (moo == 2) {
+			if(moo == 2) {
 				g.setColor(Color.orange);
 			}
-			if (moo == 3) {
+			if(moo == 3) {
 				g.setColor(Color.red);
 			}
 			g.drawOval(x + 8 * zoomFactor, y + 8 * zoomFactor, 10 * zoomFactor, 10 * zoomFactor);
 			
 			moo = randy.nextInt(4) + 1;
 			
-			if (moo == 1) {
+			if(moo == 1) {
 				g.setColor(Color.blue);
 			}
-			if (moo == 0) {
+			if(moo == 0) {
 				g.setColor(Color.green);
 			}
 			
-			if (moo == 2) {
+			if(moo == 2) {
 				g.setColor(Color.orange);
 			}
-			if (moo == 3) {
+			if(moo == 3) {
 				g.setColor(Color.red);
 			}
 			g.drawOval(x + 8 * zoomFactor, y + 8 * zoomFactor, 5 * zoomFactor, 5 * zoomFactor);
 			//  System.out.println("type" + planetType);
 		}
 		
-		if (planetType == TITAN) {
+		if(planetType == TITAN) {
 			g.setColor(Color.darkGray);
 			g.drawOval(x + 22 * zoomFactor, y + 5 * zoomFactor, 25 * zoomFactor, 25 * zoomFactor);
 			g.fillOval(x + 22 * zoomFactor, y + 5 * zoomFactor, 25 * zoomFactor, 25 * zoomFactor);
@@ -380,7 +377,7 @@ public class Planet implements Packable {
 			// System.out.println("type" + planetType);
 		}
 		
-		if (planetType == STEALTH) {
+		if(planetType == STEALTH) {
 			g.setColor(Color.black);
 			g.drawOval(x + 2 * zoomFactor, y + 2 * zoomFactor, 4 * zoomFactor, 4 * zoomFactor);
 			g.fillOval(x + 2 * zoomFactor, y + 2 * zoomFactor, 4 * zoomFactor, 4 * zoomFactor);
@@ -390,7 +387,7 @@ public class Planet implements Packable {
 			//  System.out.println("type" + planetType);
 		}
 		
-		if (planetType == SPARTAN) {
+		if(planetType == SPARTAN) {
 			g.setColor(Color.red);
 			g.drawOval(x + 20 * zoomFactor, y + 20 * zoomFactor, 25 * zoomFactor, 25 * zoomFactor);
 			g.fillOval(x + 20 * zoomFactor, y + 20 * zoomFactor, 25 * zoomFactor, 25 * zoomFactor);
@@ -400,21 +397,21 @@ public class Planet implements Packable {
 			// System.out.println("type" + planetType);
 		}
 		
-		if (planetType == IONIS) {
+		if(planetType == IONIS) {
 			g.setColor(Color.lightGray);
 			g.drawOval(x + 18 * zoomFactor, y + 25 * zoomFactor, 25 * zoomFactor, 25 * zoomFactor);
 			g.fillOval(x + 18 * zoomFactor, y + 25 * zoomFactor, 25 * zoomFactor, 25 * zoomFactor);
 			// System.out.println("type" + planetType);
 		}
 		
-		if (planetType == PEYO) {
+		if(planetType == PEYO) {
 			g.setColor(Color.blue);
 			g.drawOval(x + 28 * zoomFactor, y + 16 * zoomFactor, 15 * zoomFactor, 15 * zoomFactor);
 			g.fillOval(x + 28 * zoomFactor, y + 16 * zoomFactor, 15 * zoomFactor, 15 * zoomFactor);
 			// System.out.println("type" + planetType);
 		}
 		
-		if (planetType == RIEHL) {
+		if(planetType == RIEHL) {
 			g.setColor(Color.pink);
 			g.drawOval(x + 5 * zoomFactor, y + 5 * zoomFactor, 25 * zoomFactor, 25 * zoomFactor);
 			g.fillOval(x + 5 * zoomFactor, y + 5 * zoomFactor, 25 * zoomFactor, 25 * zoomFactor);
@@ -427,21 +424,21 @@ public class Planet implements Packable {
 			//  System.out.println("type" + planetType);
 		}
 		
-		if (planetType == SARENA) {
+		if(planetType == SARENA) {
 			g.setColor(Color.orange);
 			g.drawOval(x + 12 * zoomFactor, y + 12 * zoomFactor, 9 * zoomFactor, 9 * zoomFactor);
 			g.fillOval(x + 12 * zoomFactor, y + 12 * zoomFactor, 9 * zoomFactor, 9 * zoomFactor);
 			// System.out.println("type" + planetType);
 		}
 		
-		if (planetType == XIAN) {
+		if(planetType == XIAN) {
 			g.setColor(Color.red);
 			g.drawOval(x + 35 * zoomFactor, y + 35 * zoomFactor, 10 * zoomFactor, 10 * zoomFactor);
 			g.fillOval(x + 35 * zoomFactor, y + 35 * zoomFactor, 10 * zoomFactor, 10 * zoomFactor);
 			// System.out.println("type" + planetType);
 		}
 		
-		if (planetType == BETHELLEN) {
+		if(planetType == BETHELLEN) {
 			g.setColor(Color.white);
 			g.drawOval(x + 30 * zoomFactor, y + 8 * zoomFactor, 15 * zoomFactor, 15 * zoomFactor);
 			g.fillOval(x + 30 * zoomFactor, y + 8 * zoomFactor, 15 * zoomFactor, 15 * zoomFactor);
@@ -451,14 +448,14 @@ public class Planet implements Packable {
 			//  System.out.println("type" + planetType);
 		}
 		
-		if (planetType == MIRRIAN) {
+		if(planetType == MIRRIAN) {
 			g.setColor(Color.cyan);
 			g.drawOval(x + 20 * zoomFactor, y + 20 * zoomFactor, 20 * zoomFactor, 20 * zoomFactor);
 			g.fillOval(x + 20 * zoomFactor, y + 20 * zoomFactor, 20 * zoomFactor, 20 * zoomFactor);
 			// System.out.println("type" + planetType);
 		}
 		
-		if (planetType == ADANMA) {
+		if(planetType == ADANMA) {
 			g.setColor(Color.red);
 			g.drawOval(x + 28 * zoomFactor, y + 28 * zoomFactor, 25 * zoomFactor, 25 * zoomFactor);
 			g.fillOval(x + 28 * zoomFactor, y + 28 * zoomFactor, 25 * zoomFactor, 25 * zoomFactor);
@@ -742,7 +739,7 @@ public class Planet implements Packable {
 	}
 	
 	/**
-	   * Pack will add the letter P betweeen all the information.
+	   * Pack will add $ between all the information.
 	   *
 	   */
 	public String pack() {
@@ -760,8 +757,7 @@ public class Planet implements Packable {
 	}
 	
 	/**
-	 * 
-	 *The letter P will between all information, and will be pulled out
+	 *$ will between all information, and will be pulled out
 	 */
 	public char PARSE_CHAR = '$';
 	
@@ -769,7 +765,7 @@ public class Planet implements Packable {
 	
 		Vector inParsed = ParseUtil.parseStringBySign(data, PARSE_CHAR);
 		String header = (String) inParsed.elementAt(0);
-		if (header.equals("PLAN")) {
+		if(header.equals("PLAN")) {
 			controlledBy = Integer.parseInt((String) inParsed.elementAt(1));
 			baseOffense = Integer.parseInt((String) inParsed.elementAt(2));
 			baseDefense = Integer.parseInt((String) inParsed.elementAt(3));

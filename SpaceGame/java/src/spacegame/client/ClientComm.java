@@ -1,4 +1,4 @@
-package src.spacegame;
+package src.spacegame.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;

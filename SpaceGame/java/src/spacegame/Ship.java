@@ -1,0 +1,80 @@
+package src.spacegame;
+
+import java.util.ArrayList;
+import src.spacegame.old.ParseUtil;
+
+public class Ship implements Packable {
+	
+	private static final String HEADER_CLASS = "SHIP";
+	
+	private final char PARSE_CHAR = '?';
+	private final String headerOwner = "OWNR",
+			headerHP = "HTPT",
+			headerLocX = "LOCX",
+			headerLocY = "LOCY";
+	
+	private int ownerID = -1, locX, locY;
+	private double myHP;
+	
+	public Ship(int ownerID) {
+	
+		this.ownerID = ownerID;
+	}
+	
+	public static String getHeader() {
+	
+		return HEADER_CLASS;
+	}
+	
+	public void setNewOwner(int ownerID) {
+	
+		this.ownerID = ownerID;
+	}
+	
+	public int getOwnerID() {
+	
+		return ownerID;
+	}
+	
+	public int[] getCoord() {
+	
+		return new int[] { locX, locY };
+	}
+	
+	@Override
+	public String pack() {
+	
+		String pack = HEADER_CLASS + PARSE_CHAR;
+		
+		pack += headerOwner + ownerID + PARSE_CHAR;
+		pack += headerHP + myHP + PARSE_CHAR;
+		pack += headerLocX + locX + PARSE_CHAR;
+		pack += headerLocY + locY + PARSE_CHAR;
+		
+		return pack;
+	}
+	
+	@Override
+	public void unpack(String data) {
+	
+		ArrayList<String> parse = ParseUtil.parseString(data, PARSE_CHAR);
+
+		if(!parse.get(0).equals(HEADER_CLASS))
+			return;
+
+		for(String str : parse) {
+			String subheader = str.substring(0, 4), info = str.substring(4);
+
+			if(subheader.equals(headerOwner))
+				ownerID = Integer.parseInt(info);
+			else if(subheader.equals(headerHP))
+				myHP = Double.parseDouble(info);
+			else if(subheader.equals(headerLocX))
+				locX = Integer.parseInt(info);
+			else if(subheader.equals(headerLocY))
+				locY = Integer.parseInt(info);
+			else if(!subheader.equals(HEADER_CLASS))
+				System.out.println("Unknown Packed Info in Ship");
+		}
+	}
+}

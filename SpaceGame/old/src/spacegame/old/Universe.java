@@ -1,11 +1,19 @@
 package src.spacegame.old;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Label;
+import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.Vector;
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class Universe implements Packable {
 	//Data about the Universe!
@@ -63,7 +71,6 @@ public class Universe implements Packable {
 		universePanel.getUpdatedFrame();
 	}
 	
-
 	private final char PARSE_CHAR = '*';
 	
 	/**
@@ -81,6 +88,7 @@ public class Universe implements Packable {
 				theThingToPack += sectors[x][y].pack() + PARSE_CHAR;
 			}
 		}
+		
 		return theThingToPack;
 	}
 	
@@ -107,7 +115,6 @@ public class Universe implements Packable {
 		}
 	}
 	
-
 	public JPanel getNorthPanel()//
 	{
 	
@@ -144,7 +151,7 @@ public class Universe implements Packable {
 		panel.add(slider2);
 		return panel;
 	}
-
+	
 	class UniversePanel extends JPanel implements MouseListener, MouseMotionListener {
 		public int zoomSlider = 3;
 		public int scrollSlider = 3;
@@ -229,7 +236,7 @@ public class Universe implements Packable {
 								//how far over until only the bottom parts are showing
 				
 		}
-
+		
 		public void mouseEntered(MouseEvent e) {
 		
 			moveable = true;
@@ -238,7 +245,7 @@ public class Universe implements Packable {
 		public void mouseExited(MouseEvent e) {
 		
 			moveable = false;
-		}  
+		}
 		
 		public void mousePressed(MouseEvent e) {
 		

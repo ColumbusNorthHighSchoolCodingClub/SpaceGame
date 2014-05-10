@@ -1,7 +1,8 @@
 package src.spacegame.old;
 
-import java.util.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.Vector;
 
 /**
  * Write a description of class Ships here.
@@ -90,9 +91,9 @@ public class Ships implements Packable {
 	{
 	
 		//Determine if yours, ally or enemy for coloring
-		if (ClientMain.myPlayerNum == playerNum)
+		if(ClientMain.myPlayerNum == playerNum)
 			g.setColor(Color.GREEN);
-		else if (Roster.getPlayer(ClientMain.myPlayerNum).getAlliances().isAllied(playerNum))
+		else if(Roster.getPlayer(ClientMain.myPlayerNum).getAlliances().isAllied(playerNum))
 			g.setColor(Color.YELLOW);
 		else
 			g.setColor(Color.RED);
@@ -103,9 +104,6 @@ public class Ships implements Packable {
 		g.drawRect(Scale * 2 + X + Scale * 3 * fleetNum, Scale * 2 + Y, Scale * 3, Scale * 3);
 	}
 	
-	//============================================================================================    
-	//============================================================================================    
-	//============================================================================================    
 	public final char PARSE_CHAR = '?';
 	
 	public String pack() {
@@ -118,7 +116,7 @@ public class Ships implements Packable {
 	
 		Vector inParsed = ParseUtil.parseStringBySign(data, PARSE_CHAR);
 		String header = (String) inParsed.elementAt(0);
-		if (header.equals("SHIP")) {
+		if(header.equals("SHIP")) {
 			playerNum = Integer.parseInt((String) inParsed.elementAt(1));
 			numShips = Integer.parseInt((String) inParsed.elementAt(2));
 			destX = Integer.parseInt((String) inParsed.elementAt(3));

@@ -1,10 +1,18 @@
 package src.spacegame.old;
 
-import java.util.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.lang.Integer;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Vector;
+import javax.swing.JPanel;
+
+//XXX: Done Remaking
 
 /**
  * Stores a sector, including its planet and any ships in the sector. Will also
@@ -14,10 +22,6 @@ import java.lang.Integer;
  * @version 0.1
  */
 public class Sector implements Packable {
-	
-	//////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////// Variables //////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////
 	
 	Random randy = new Random();
 	TextField inputX = new TextField("Enter target X");
@@ -32,15 +36,11 @@ public class Sector implements Packable {
 	
 	public boolean hasPlanet() {
 	
-		if (planetExists == true)
+		if(planetExists == true)
 			return true;
 		else
 			return false;
 	}
-	
-	//////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////// Constructor /////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Initializes the planet and the ships in the sector.
@@ -56,15 +56,11 @@ public class Sector implements Packable {
 	
 	public void createRandom() {
 	
-		if (randy.nextInt(2) == 0) {
+		if(randy.nextInt(2) == 0) {
 			planet = new Planet();
 			planetExists = true;
 		}
 	}
-	
-	//////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////// Panels, Drawing ///////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Creates a panel in which a player can input a destination for his ships.
@@ -100,8 +96,8 @@ public class Sector implements Packable {
 	
 	public Ships getMyShips(int player) {
 	
-		for (int x = 0; x < ships.size(); x++)
-			if (ships.get(x).getPlayerNum() == player)
+		for(int x = 0; x < ships.size(); x++)
+			if(ships.get(x).getPlayerNum() == player)
 				return ships.get(x);
 		return null;
 	}
@@ -115,45 +111,44 @@ public class Sector implements Packable {
 		g.fillRect(x, y, WIDTH, HEIGHT);
 		g.setColor(playerColor());
 		g.drawRect(x, y, WIDTH, HEIGHT);
-		if (planetExists)
+		if(planetExists)
 			planet.wantSmallPlanetFrame(g, x, y, zoomFactor, p);
-		if (!ships.isEmpty()) {
+		if(!ships.isEmpty()) {
 			//             Debug.msg("Drawing Ships");
-			for (int h = 0; h < ships.size(); h++)
+			for(int h = 0; h < ships.size(); h++)
 				ships.get(h).drawShip(g, x, y, zoomFactor, h);
 		}
 	}
 	
+	/**
+	 * MOVED: PlanetType
+	 */
 	private Color playerColor() {
 	
-		if (planetExists) {
-			if (planet.getControlledBy() == -1)
+		if(planetExists) {
+			if(planet.getControlledBy() == -1)
 				return Color.GRAY;
-			if (planet.getControlledBy() == 0)
+			if(planet.getControlledBy() == 0)
 				return Color.PINK;
-			if (planet.getControlledBy() == 1)
+			if(planet.getControlledBy() == 1)
 				return Color.CYAN;
-			if (planet.getControlledBy() == 2)
+			if(planet.getControlledBy() == 2)
 				return Color.BLUE;
-			if (planet.getControlledBy() == 3)
+			if(planet.getControlledBy() == 3)
 				return Color.YELLOW;
-			if (planet.getControlledBy() == 4)
+			if(planet.getControlledBy() == 4)
 				return Color.MAGENTA;
-			if (planet.getControlledBy() == 5)
+			if(planet.getControlledBy() == 5)
 				return Color.GREEN;
-			if (planet.getControlledBy() == 6)
+			if(planet.getControlledBy() == 6)
 				return Color.ORANGE;
-			if (planet.getControlledBy() == 7)
+			if(planet.getControlledBy() == 7)
 				return Color.WHITE;
 		}
-		if (contested)
+		if(contested)
 			return Color.RED;
 		return Color.GRAY;
 	}
-	
-	//////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////// Packing Methods ///////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////
 	
 	private final char PARSE_CHAR = '§';
 	
@@ -166,12 +161,12 @@ public class Sector implements Packable {
 	public String pack() {
 	
 		String shipString = "";// + ships.size() + PARSE_CHAR;
-		for (int h = 0; h < ships.size(); h++)
+		for(int h = 0; h < ships.size(); h++)
 			shipString += ships.get(h).pack() + PARSE_CHAR;
 		
 		String output = "SECT" + PARSE_CHAR;
 		
-		if (planetExists)
+		if(planetExists)
 			output += planet.pack() + PARSE_CHAR;
 		
 		output += shipString;
@@ -191,20 +186,20 @@ public class Sector implements Packable {
 		int shipsSize = 0;
 		Vector inParsed = ParseUtil.parseStringBySign(data, PARSE_CHAR);
 		String header = (String) inParsed.elementAt(0);
-		if (header.equals("SECT")) {
+		if(header.equals("SECT")) {
 			planetExists = false; //Assume no planet until you know otherwise.
 			ships.clear(); //Assume no ships until otherwise. 
 			
-			for (int z = 1; z < inParsed.size(); z++) {
+			for(int z = 1; z < inParsed.size(); z++) {
 				String parseData = (String) inParsed.elementAt(z);
 				String subHeader = parseData.substring(0, 4);
 				
-				if (subHeader.equals("PLAN")) {
+				if(subHeader.equals("PLAN")) {
 					planet = new Planet();
 					planetExists = true;
 					planet.unpack((String) inParsed.elementAt(z));
 				}
-				else if (subHeader.equals("SHIP")) {
+				else if(subHeader.equals("SHIP")) {
 					//                     Debug.msg("Unpacking a Ships!");
 					ships.add(new Ships());
 					ships.get(ships.size() - 1).unpack(parseData);
@@ -219,10 +214,10 @@ public class Sector implements Packable {
 	
 		String output = "Sector: ";
 		
-		if (planetExists)
+		if(planetExists)
 			output += "has Planet !";
 		
-		for (int z = 0; z < ships.size(); z++)
+		for(int z = 0; z < ships.size(); z++)
 			output += "ships (" + ships.get(z).numShips + "," + ships.get(z).playerNum + ") ";
 		
 		return output;
@@ -258,22 +253,18 @@ public class Sector implements Packable {
 	//         }
 	//     }
 	
-	//////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////// Action Listeners //////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////
-	
 	class GO_AL implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 		
 			try {
-				for (int h = 0; h < ships.size(); h++)
-					if (ships.get(h).getPlayerNum() == ClientMain.myPlayerNum) {
+				for(int h = 0; h < ships.size(); h++)
+					if(ships.get(h).getPlayerNum() == ClientMain.myPlayerNum) {
 						ships.get(h).setXDest(Integer.parseInt(inputX.getText()));
 						ships.get(h).setYDest(Integer.parseInt(inputY.getText()));
 						GenericComm.addToOutbox(ships.get(h).pack());
 					}
 			}
-			catch (Exception NumberFormatException) {
+			catch(Exception NumberFormatException) {
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package src.spacegame;
+package src.spacegame.client;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
