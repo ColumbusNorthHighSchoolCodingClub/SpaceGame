@@ -1,26 +1,32 @@
 package src.spacegame;
 
 import java.util.ArrayList;
-import src.spacegame.old.ParseUtil;
 
 public class Ship implements Packable {
 	
+	//XXX: Packing and unPacking Validated
+
 	private static final String HEADER_CLASS = "SHIP";
 	
 	private final char PARSE_CHAR = '?';
 	private final String headerOwner = "OWNR",
-			headerHP = "HTPT",
+			headerHP = "MYHP",
 			headerLocX = "LOCX",
 			headerLocY = "LOCY";
 	
 	private int ownerID = -1, locX, locY;
-	private double myHP;
+	private int myHP;
 	
 	public Ship(int ownerID) {
 	
 		this.ownerID = ownerID;
 	}
 	
+	public Ship(String data) {
+
+		unpack(data);
+	}
+
 	public static String getHeader() {
 	
 		return HEADER_CLASS;
@@ -41,6 +47,22 @@ public class Ship implements Packable {
 		return new int[] { locX, locY };
 	}
 	
+	public void setCoord(int x, int y) {
+	
+		this.locX = x;
+		this.locY = y;
+	}
+
+	public int getHP() {
+	
+		return this.myHP;
+	}
+
+	public void setHP(int hp) {
+	
+		this.myHP = hp;
+	}
+
 	@Override
 	public String pack() {
 	
@@ -68,7 +90,7 @@ public class Ship implements Packable {
 			if(subheader.equals(headerOwner))
 				ownerID = Integer.parseInt(info);
 			else if(subheader.equals(headerHP))
-				myHP = Double.parseDouble(info);
+				myHP = Integer.parseInt(info);
 			else if(subheader.equals(headerLocX))
 				locX = Integer.parseInt(info);
 			else if(subheader.equals(headerLocY))

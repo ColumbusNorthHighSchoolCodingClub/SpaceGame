@@ -2,10 +2,11 @@ package src.spacegame;
 
 import java.util.ArrayList;
 import java.util.Random;
-import src.spacegame.old.ParseUtil;
 
 public class Planet implements Packable {
 	
+	//XXX: Packing and unPacking Validated
+
 	private static final String HEADER_CLASS = "PLNT";
 	
 	private final char PARSE_CHAR = '$';
@@ -17,15 +18,19 @@ public class Planet implements Packable {
 	private int ownerID = -1;
 	private PlanetType myType;
 	
-	public Planet() {
+	public Planet(String data) {
 	
-		this(-1);
+		this.unpack(data);
 	}
 	
 	public Planet(int ownerID) {
 	
 		this.ownerID = ownerID;
 		genPlanet();
+	}
+	
+	public Planet() {
+
 	}
 	
 	public static String getHeader() {
@@ -44,9 +49,19 @@ public class Planet implements Packable {
 		return ownerID;
 	}
 	
+	public PlanetType getType() {
+	
+		return myType;
+	}
+
 	public void setNewOwner(int ownerID) {
 	
 		this.ownerID = ownerID;
+	}
+	
+	public void setType(PlanetType type) {
+
+		this.myType = type;
 	}
 	
 	@Override
