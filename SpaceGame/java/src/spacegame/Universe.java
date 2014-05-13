@@ -14,6 +14,12 @@ public class Universe implements Packable {
 	
 	private Sector[][] sectors;
 	
+	/**
+	 * Creates a New Random Universe with Given Width and Height
+	 *
+	 * @param sctW How Wide the Universe will Be
+	 * @param sctH How Tall the Universe will Be
+	 */
 	public Universe(int sctW, int sctH) {
 	
 		SECTOR_WIDTH = sctW;
@@ -26,15 +32,27 @@ public class Universe implements Packable {
 				sectors[w][h] = new Sector(w, h);
 	}
 	
+	/**
+	 * Creates a Universe from the Given String of Data
+	 *
+	 * @param data Data to be unpacked
+	 */
 	public Universe(String data) {
 	
 		this.unpack(data);
 	}
 
+	/**
+	 * A Blank Universe to for future unpackaging.
+	 */
 	public Universe() {
 	
 	}
 
+	/**
+	 * Gets the Header used in Packing and Unpacking data
+	 * @return HEADER_CLASS
+	 */
 	public static String getHeader() {
 	
 		return HEADER_CLASS;

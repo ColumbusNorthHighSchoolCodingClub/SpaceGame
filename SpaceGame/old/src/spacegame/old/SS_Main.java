@@ -1,9 +1,10 @@
 package src.spacegame.old;
 
-import java.net.*;
-import java.io.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.ServerSocket;
+import javax.swing.Timer;
 
 public class SS_Main implements ActionListener
 //The Server-side main (MULTI_SERVER!)
@@ -23,7 +24,7 @@ public class SS_Main implements ActionListener
 	
 		SS_GameEngine.initializeGame();
 		Debug.msg("Universe and game initialized...");
-		//         
+		//
 		//                 Planet.initializePlanets(); //Austin
 		//         Debug.msg("Planet types made...");
 		
@@ -41,15 +42,14 @@ public class SS_Main implements ActionListener
 			//             System.out.println("At the start2.");
 			
 		}
-		catch (IOException e) {
+		catch(IOException e) {
 			System.err.println("Could not listen on port: 4444. or 4445.?");
 			System.exit(-1);
 		}
 		
 		//Create a new thread whenever someone tries to connect...
 		//-----------------------------------------
-		while (listening) {
-			//             System.out.println("In the while.");
+		while(listening) {
 			new SS_Thread(sendSocket.accept()).start();
 		}
 		
@@ -67,14 +67,15 @@ public class SS_Main implements ActionListener
 		timer.start();
 	}
 	
-	//========================================================================    
+	//========================================================================
+	@Override
 	public void actionPerformed(ActionEvent e) { //--SEND/GET UPDATE(s) FROM SERVER--
 	
-		//Called whenever timer goes off (every 60 sec.) 
+		//Called whenever timer goes off (every 60 sec.)
 		Debug.msg("Processing the Server InBox (Timer event) ");
 		SS_GameEngine.processInbox();
 		
-	}//--- end of actionPerformed() method ---    
+	}//--- end of actionPerformed() method ---
 	
 }//-- end of SS_Main class --
 

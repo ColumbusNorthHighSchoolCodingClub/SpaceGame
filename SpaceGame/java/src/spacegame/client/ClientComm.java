@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 
 public class ClientComm {
 	
@@ -17,16 +15,18 @@ public class ClientComm {
 	
 	private ClientMain clMain;
 	private ArrayList<String> outBox;
+
+	private boolean connected = false;
 	
 	/**
 	 * Creates a Communication link between the server and the client.
-	 * 
+	 *
 	 * @param clInfo The ClientInfo Instance for the current client.
 	 * @param skt The Socket to Connect to the Server
 	 */
-	public ClientComm(ClientMain clMain) {
+	public ClientComm(ClientMain clMain, Socket socket) {
 	
-		initSocket();
+		this.socket = socket;
 		
 		try {
 			writer = new PrintWriter(socket.getOutputStream(), true);
@@ -34,40 +34,25 @@ public class ClientComm {
 			
 			this.clMain = clMain;
 			outBox = new ArrayList<String>();
-		}
-		catch (IOException e) {
-			System.out.println("I/O exception occurred in Creating ClientComm");
-			System.exit(1);
-		}
-	}
-	
-	/**
-	 * Initializes the Socket for Communication Between Client and Server
-	 */
-	public void initSocket() {
-		
-		String serverName = JOptionPane.showInputDialog("Please enter the Server IP address", "0.0.0.0");
-		try {
-			socket = new Socket(serverName, 4444);
-		}
-		catch(UnknownHostException e) {
-			System.out.println("Unable to Connect to host. Invalid IP or Network Access Doesn't Exist.");
-			System.exit(1);
+			connected = true;
 		}
 		catch(IOException e) {
-			System.out.println("IOException in method initSocket in class ClientComm");
-			System.exit(1);
+			System.out.println("I/O exception occurred in Creating ClientComm");
 		}
 	}
 	
+	public boolean isConnected() {
+	
+		return connected;
+	}
+
 	/**
 	 * Sends out all of the Messages in the outBox.
 	 */
 	public void sendMessages() {
 	
-		for (String msg : outBox) {
+		for(String msg : outBox) {
 			writer.println(msg);
-			System.out.println(msg);
 		}
 		
 		outBox.clear();
@@ -93,7 +78,7 @@ public class ClientComm {
 		try {
 			msg = reader.readLine();
 		}
-		catch (IOException e) { //This means the connection is severed! (in some cases at least)
+		catch(IOException e) { //This means the connection is severed! (in some cases at least)
 			return "Connection Lost. Probably.";
 		}
 		
@@ -105,10 +90,10 @@ public class ClientComm {
 		ArrayList<String> msgList = new ArrayList<String>();
 		
 		try {
-			while (reader.ready())
+			while(reader.ready())
 				msgList.add(getMessage());
 		}
-		catch (IOException e) { //This means the connection is severed! (in some cases at least)
+		catch(IOException e) { //This means the connection is severed! (in some cases at least)
 			System.out.println("IOException in class ClientComm");
 			this.close();
 		}
@@ -126,7 +111,7 @@ public class ClientComm {
 			reader.close();
 			socket.close();
 		}
-		catch (IOException e) {
+		catch(IOException e) {
 			System.out.println("I/O exception occurred in Creating ClientComm");
 			System.exit(1);
 		}

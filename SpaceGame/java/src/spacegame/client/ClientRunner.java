@@ -30,6 +30,8 @@ public class ClientRunner {
 		this.myFrame.setVisible(true);
 		this.myFrame.setResizable(world.isResizable());
 		
+		this.myFrame.setLocationRelativeTo(null);
+		
 		startAnimation();
 	}
 	
@@ -42,19 +44,42 @@ public class ClientRunner {
 	
 	public void startAnimation() {
 	
-		Timer animation = new Timer(1000 / this.world.getTimerDelay(), new ActionListener() {
-			
+		Thread anim = new Thread() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void run() {
 			
-				if(!ClientRunner.this.myFrame.isResizable())
-					ClientRunner.this.myFrame.pack();
-				ClientRunner.this.myFrame.getComponent(0).repaint();
-				ClientRunner.this.world.process();
+				Timer timer = new Timer(1000 / 60, new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+					
+						if(!ClientRunner.this.myFrame.isResizable())
+							ClientRunner.this.myFrame.pack();
+						ClientRunner.this.myFrame.getComponent(0).repaint();
+						ClientRunner.this.world.process();
+					}
+				});
+				timer.start();
 			}
-		}); // --end of construction of Timer--
-		
-		animation.start();
+		};
+
+		Thread process = new Thread() {
+
+			@Override
+			public void run() {
+
+				Timer timer = new Timer(1000 / ClientRunner.this.world.getTimerDelay(), new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+					
+						ClientRunner.this.world.process();
+					}
+				});
+				timer.start();
+			}
+		};
+
+		anim.start();
+		process.start();
 	}
 	
 	public static void main(String[] args) {
