@@ -6,12 +6,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import src.spacegame.client.ClientMain;
 import com.arcadeengine.AnimPanel;
 import com.arcadeengine.gui.Gui;
 import com.arcadeengine.gui.GuiComponent;
 
 public class GuiDebug extends Gui {
+	
 	private ClientMain demo = (ClientMain) panel;
 	
 	private String addBreak = "----------------------";
@@ -32,7 +35,7 @@ public class GuiDebug extends Gui {
 		int height = -4;
 		int spacing = -2;
 		
-		final Font font = new Font("Arial", Font.BOLD, 13);
+		final Font font = new Font("Consolas", Font.BOLD, 13);
 		
 		for(String str : debug) {
 			g.setFont(font);
@@ -56,10 +59,22 @@ public class GuiDebug extends Gui {
 	@Override
 	public void updateGui() {
 	
+		String ip = "null";
+		
+		try {
+			InetAddress addr = InetAddress.getLocalHost();
+			ip = addr.getHostAddress();
+
+		}
+		catch(UnknownHostException e) {
+		}
+		
 		// All of the info to be displayed on the screen if debug is on.
 		debug = new String[] {
 				"FPS: " + demo.getFPS(),
 				"Frame Number: " + demo.getFrameNumber(),
+				"IP Address: " + ip,
+				"Running Local Server: " + demo.isServerRunning(),
 				addBreak, "Mouse X: " + demo.getMousePosition().x,
 				"Mouse Y: " + demo.getMousePosition().y,
 				"Left Click Held: " + demo.isLeftClickHeld(),
