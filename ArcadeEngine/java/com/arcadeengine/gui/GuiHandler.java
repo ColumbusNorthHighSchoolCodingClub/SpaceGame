@@ -2,7 +2,6 @@ package com.arcadeengine.gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
-
 import com.arcadeengine.AnimPanel;
 
 public class GuiHandler {
@@ -17,11 +16,12 @@ public class GuiHandler {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param startGui
 	 *            The gui to be displayed when first started.
 	 */
 	public GuiHandler(AnimPanel panel, Gui startGui) {
+
 		this.panel = panel;
 
 		this.currentGui = startGui;
@@ -31,14 +31,17 @@ public class GuiHandler {
 	 * The current Gui.
 	 */
 	public Gui getGui() {
+
 		try {
 			return currentGui;
-		} catch (NullPointerException e) {
+		}
+		catch(NullPointerException e) {
 			return null;
 		}
 	}
 
 	public void addDebug(Gui debug) {
+
 		this.debugGui = debug;
 
 		this.debugenabled = true;
@@ -48,6 +51,7 @@ public class GuiHandler {
 	 * The current state of the Debug screen.
 	 */
 	public boolean getDebugState() {
+
 		return debugstate;
 	}
 
@@ -55,6 +59,7 @@ public class GuiHandler {
 	 * Set the state of the debug screen.
 	 */
 	public void setDebugState(boolean state) {
+
 		debugstate = state;
 	}
 
@@ -62,13 +67,16 @@ public class GuiHandler {
 	 * Inverts the current state of the debug screen. (ON/OFF)
 	 */
 	public void invertDebugState() {
+
 		debugstate = !debugstate;
 	}
 
 	public Color getBGColor() {
+
 		try {
 			return bg;
-		} catch (NullPointerException e) {
+		}
+		catch(NullPointerException e) {
 			return null;
 		}
 	}
@@ -77,6 +85,7 @@ public class GuiHandler {
 	 * The current GUI being displayed.
 	 */
 	public Gui getCurrentGui() {
+
 		return this.currentGui;
 	}
 
@@ -84,36 +93,40 @@ public class GuiHandler {
 	 * The last GUI visited.
 	 */
 	public Gui getPrevGui() {
+
 		try {
 			return this.currentGui.getParent();
-		} catch (NullPointerException e) {
+		}
+		catch(NullPointerException e) {
 			return null;
 		}
 	}
 
 	/**
 	 * Updates everything about the GUI.
-	 * 
+	 *
 	 * @param g
 	 *            The graphics object.
 	 * @param panel
 	 *            put 'this' in here if in the class 'Game'.
 	 */
 	public void drawGui(Graphics g) {
+
 		g.setColor(bg);
 		g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
 
 		this.currentGui.drawGui(g);
 
-		if (this.debugstate && debugenabled)
+		if(this.debugstate && debugenabled)
 			this.debugGui.drawGui(g);
 	}
 
 	public void updateGui() {
+
 		updateBG();
 		this.currentGui.updateGui();
 
-		if (this.debugstate && debugenabled)
+		if(this.debugstate && debugenabled)
 			this.debugGui.updateGui();
 	}
 
@@ -121,27 +134,28 @@ public class GuiHandler {
 	 * Updates the color of the GUI to match the currently stored color.
 	 */
 	public void updateBG() {
+
 		int r = bg.getRed(), g = bg.getGreen(), b = bg.getBlue(), a = bg.getAlpha();
 
-		for (int loop = 0; loop < 5; loop++) {
-			if (r < this.currentGui.getBGColor().getRed())
+		for(int loop = 0; loop < 5; loop++) {
+			if(r < this.currentGui.getBGColor().getRed())
 				r++;
-			else if (r > this.currentGui.getBGColor().getRed())
+			else if(r > this.currentGui.getBGColor().getRed())
 				r--;
 
-			if (b < this.currentGui.getBGColor().getBlue())
+			if(b < this.currentGui.getBGColor().getBlue())
 				b++;
-			else if (b > this.currentGui.getBGColor().getBlue())
+			else if(b > this.currentGui.getBGColor().getBlue())
 				b--;
 
-			if (g < this.currentGui.getBGColor().getGreen())
+			if(g < this.currentGui.getBGColor().getGreen())
 				g++;
-			else if (g > this.currentGui.getBGColor().getGreen())
+			else if(g > this.currentGui.getBGColor().getGreen())
 				g--;
 
-			if (a < this.currentGui.getBGColor().getAlpha())
+			if(a < this.currentGui.getBGColor().getAlpha())
 				a++;
-			else if (a > this.currentGui.getBGColor().getAlpha())
+			else if(a > this.currentGui.getBGColor().getAlpha())
 				a--;
 		}
 
@@ -152,13 +166,14 @@ public class GuiHandler {
 	 * ONLY FOR GUITRANSITION!
 	 */
 	public void setGui(Gui next) {
+
 		currentGui = next;
 	}
 
 	/**
 	 * Switches smoothly the Gui to another while preserving the last to be used
 	 * for later .
-	 * 
+	 *
 	 * @param parent
 	 *            The current Gui being displayed. Put "this" here.
 	 * @param next
@@ -166,21 +181,39 @@ public class GuiHandler {
 	 * @return The next Gui with the given parent for use with previousGui()"
 	 */
 	public void switchGui(Gui next) {
+
 		System.out.println("*** Switching Guis From " + currentGui.getClass().getSimpleName() + " To " + next.getClass().getSimpleName() + " ***");
 
 		next.setParent(currentGui);
 
 		this.currentGui = new GuiTransition(panel, TransitionType.slideLeft, currentGui, next);
 	}
+	
+	public void switchGui(Gui next, TransitionType type) {
+
+		System.out.println("*** Switching Guis From " + currentGui.getClass().getSimpleName() + " To " + next.getClass().getSimpleName() + " ***");
+
+		next.setParent(currentGui);
+
+		this.currentGui = new GuiTransition(panel, type, currentGui, next);
+	}
 
 	/**
 	 * Returns to the last Gui that was visited.
-	 * 
+	 *
 	 * @return The last Gui that was visited.
 	 */
 	public void previousGui() {
+
 		System.out.println("*** Returning to Gui: " + currentGui.getParent().getClass().getSimpleName() + " ***");
 
 		this.currentGui = new GuiTransition(panel, TransitionType.slideRight, currentGui, currentGui.getParent());
+	}
+
+	public void previousGui(TransitionType type) {
+	
+		System.out.println("*** Returning to Gui: " + currentGui.getParent().getClass().getSimpleName() + " ***");
+
+		this.currentGui = new GuiTransition(panel, type, currentGui, currentGui.getParent());
 	}
 }

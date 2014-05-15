@@ -1,5 +1,5 @@
 package com.arcadeengine.gui;
 
 public enum TransitionType {
-	slideLeft, slideRight, slideUp, slideDown
+	slideLeft, slideRight, slideUp, slideDown, fade,
 }
