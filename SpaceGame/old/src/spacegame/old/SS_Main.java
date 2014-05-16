@@ -20,6 +20,8 @@ public class SS_Main implements ActionListener
 		joe.runTheGameServer();
 	}
 	
+	ServerSocket sendSocket;
+
 	public void runTheGameServer() throws IOException {
 	
 		SS_GameEngine.initializeGame();
@@ -31,7 +33,6 @@ public class SS_Main implements ActionListener
 		initTimer();
 		Debug.msg("Game Timer initialized...");
 		
-		ServerSocket sendSocket = null;
 		boolean listening = true;
 		
 		//Declare and establish the Server Socket...
@@ -65,6 +66,23 @@ public class SS_Main implements ActionListener
 		timer.setInitialDelay(0);
 		timer.setCoalesce(true);
 		timer.start();
+	}
+	
+	public Timer getTimer() {
+
+		return timer;
+	}
+	
+	public void stop() {
+	
+		this.timer.stop();
+		try {
+			sendSocket.close();
+		}
+		catch(IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	//========================================================================
