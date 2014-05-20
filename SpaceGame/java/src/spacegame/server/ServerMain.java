@@ -7,9 +7,8 @@ import java.net.ServerSocket;
 
 import javax.swing.Timer;
 
-import src.spacegame.old.Debug;
-import src.spacegame.old.SS_GameEngine;
-import src.spacegame.old.SS_Thread;
+import src.spacegame.server.SS_GameEngine;
+import src.spacegame.server.SS_Thread;
 /**
  * Does server things. 
  * Original author: Mike Spock
@@ -24,7 +23,7 @@ public class ServerMain implements ActionListener //The Server-side main (MULTI_
 	
 	public void main(String[] args) throws IOException 
 	{
-		Debug.msg("Starting up server...");
+		System.out.println("Starting up server...");
 		ServerMain joe = new ServerMain();
 		joe.runServer();
 	}
@@ -32,9 +31,9 @@ public class ServerMain implements ActionListener //The Server-side main (MULTI_
 	public void runServer() throws IOException 
 	{
 		SS_GameEngine.initializeGame();
-		Debug.msg("Universe and game initialized...");
+		System.out.println("Universe and game initialized...");
 		initTimer();
-		Debug.msg("Game Timer initialized...");		
+		System.out.println("Game Timer initialized...");		
 		ServerSocket sendSocket = null;
 		boolean listening = true;
 		
@@ -66,7 +65,7 @@ public class ServerMain implements ActionListener //The Server-side main (MULTI_
 	
 	public void actionPerformed(ActionEvent e) //--SEND/GET UPDATE(s) FROM SERVER--
 	{ 									 	//Called whenever timer goes off (every 60 sec.)
-		Debug.msg("Processing the Server InBox (Timer event) ");
+		System.out.println("Processing the Server InBox (Timer event) ");
 		SS_GameEngine.processInbox();		
 	}
 }

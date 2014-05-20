@@ -12,13 +12,18 @@ public class Market implements Packable {
 	private final int fuelMultiplier = 50, matMultiplier = 50;
 
 	private ClientMain clMain;
-	private ClientInfo clInfo;
-
+	private ClientInfo clInfo;	
+	
 	public Market(ClientMain clMain) {
 	
 		this.clMain = clMain;
 		clInfo = clMain.getClientInfo();
 
+	}
+	
+	public Market()
+	{
+	
 	}
 
 	public static String getHeader() {

@@ -2,12 +2,10 @@ package src.spacegame.server;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import src.spacegame.client.ClientInfo;
-import src.spacegame.old.Debug;
-import src.spacegame.old.Login;
-import src.spacegame.old.Market;
-import src.spacegame.old.Player;
-import src.spacegame.old.Roster;
+import src.spacegame.Market;
+import src.spacegame.Roster;
 import src.spacegame.Planet;
 import src.spacegame.Universe;
 import src.spacegame.server.ServerMessage;
@@ -22,12 +20,12 @@ import src.spacegame.server.ServerMessage;
 public class SS_GameEngine 
 {
 	//a static array that each request to change the universe goes into...
-	private static ArrayList<ServerMessage> inbox = new ArrayList<ServerMessage>(); 	
-	private static ArrayList<Integer> scoreBoard = new ArrayList<Integer>();
-	
+	private ArrayList<ServerMessage> inbox = new ArrayList<ServerMessage>(); 	
+	private ArrayList<Integer> scoreBoard = new ArrayList<Integer>();
+	private Roster roster = new Roster();
 	//The major game objects
-	private static Universe theUniverse;
-	private static Market theMarket;
+	private Universe theUniverse;
+	private Market theMarket;
 	
 	public void initializeGame() 
 	{
@@ -58,7 +56,7 @@ public class SS_GameEngine
 			String header =  message.getMessage().substring(0,4);
 			
 				//Send the universe, etc...
-			if(header == "REQU") Debug.msg("Requests should've been handled in SS_Thread! ugh.");
+			if(header == "REQU") System.out.println("Requests should've been handled in SS_Thread! ugh.");
 				//Process a move request
 			else if(header.equals("MOVE")) processMoveRequest(message.getMessage()); 
 				//Process a market buy
@@ -74,7 +72,7 @@ public class SS_GameEngine
 				//Process a new login
 			else if(header.equals("LOGI")) processNewLogin(message);
 				//In case of a mistake
-			else Debug.msg("<SS_Thread> Unexpected message format: " + message.getMessage());
+			else System.out.println("<SS_Thread> Unexpected message format: " + message.getMessage());
 			
 			inbox.remove(i);
 			i--;			
@@ -106,9 +104,9 @@ public class SS_GameEngine
 	
 	private void processShipUpgrade(ServerMessage in) 
 	{
-		Player temp = Roster.getPlayer(in.getWho());
-		temp.getShipStats().unpack(in.getMessage());
-		Roster.getPlayer(in.getWho()).getShipStats().unpack(in.getMessage());
+		ClientInfo temp = roster.getRoster().get(in.getWho());
+//		temp.getShipStats().unpack(in.getMessage());
+//		roster.getPlayer(in.getWho()).getShipStats().unpack(in.getMessage());
 		//Take care of cost.
 	}
 	
@@ -127,17 +125,14 @@ public class SS_GameEngine
 		int who = in.getWho();
 		String message = in.getMessage();
 
-		Debug.msg("Processing new Login! - " + message);
-		Login theLogin = new Login(false);
-		theLogin.unpack(message);
+		System.out.println("Processing new Login! - " + message);
 
-		ClientInfo newPlayer = new ClientInfo();
-		newPlayer.setName(theLogin.getName());
+		ClientInfo newPlayer = new ClientInfo(message);
 
-		Roster.addPlayer(newPlayer);
+		roster.addPlayer(newPlayer);
 		startUpPlayerGeneration(who);
 
-		Debug.msg("Done with new Login.  New Roster Size = " + Roster.getRosterSize());
+		System.out.println("Done with new Login.  New Roster Size = " + roster.getRoster().size());
 	}
 	
 	private void updateSupplies() 
@@ -149,15 +144,13 @@ public class SS_GameEngine
 				for(Planet v : theUniverse.getSectors()[a][b].getPlanets())
 				{
 					int playerID = v.getOwnerID();
-					ClientInfo player = Roster.getPlayer(playerID);
-					double materialsZ = Roster.getPlayer(playerID).getMaterials();
-					double fuelZ = 0;
-					materialsZ += (Roster.getPlayer(playerID).getTechnology().getMineSpeed() * .05 + .2) * v.getMaterialCapacity();
-
-					fuelZ += (Roster.theRoster.get(playerID).getTechnology().getFuelSpeed() * .05 + .2) * theUniverse.getSector(a, b).planet.getFuelCapacity();
-
-					Roster.theRoster.get(playerID).setMaterials((int) materialsZ);
-					Roster.theRoster.get(playerID).setFuel((int) fuelZ);
+					ClientInfo player = roster.getRoster().get(playerID);
+					//double materialsZ = ;
+					//double fuelZ = 0;
+					//materialsZ += (player.getTechnology().getMineSpeed() * .05 + .2) * v.getMat();
+					//fuelZ += (player.getTechnology().getFuelSpeed() * .05 + .2) * v.getFuel();
+					player.setMaterials((int) (player.getMaterials() + ((player.getTechnology().getMineSpeed() * .05 + .2) * v.getMat())));
+					player.setFuel((int) (player.getTechnology().getFuelSpeed() * .05 + .2) * v.getFuel());
 				}
 			}
 		}

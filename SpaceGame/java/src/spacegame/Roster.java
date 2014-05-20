@@ -9,14 +9,17 @@ package src.spacegame;
 import java.util.ArrayList;
 
 import src.spacegame.client.ClientInfo;
-import src.spacegame.old.Debug;
-import src.spacegame.old.ParseUtil;
-import src.spacegame.old.Player;
+
 
 public class Roster implements Packable 
 {
 	private static final char PARSE_CHAR = '*'; //The parse character for this class.
 	private ArrayList<ClientInfo> playerRoster = new ArrayList<ClientInfo>();
+	
+	public Roster()
+	{
+		
+	}
 	
 	public ArrayList<ClientInfo> getRoster()
 	{
@@ -26,7 +29,7 @@ public class Roster implements Packable
 	public int addPlayer(ClientInfo in)
 	{
 		playerRoster.add(in);
-		Debug.msg("Roster: added Player - " + in.getName() + " size is now:" + playerRoster.size());
+		System.out.println("Roster: added Player - " + in.getName() + " size is now:" + playerRoster.size());
 		return playerRoster.size() - 1;
 	}
 	
@@ -65,7 +68,7 @@ public class Roster implements Packable
 			}
 		}
 		else
-			Debug.msg("Incorrect header (" + data.substring(0, 4) + ")" );
+			System.out.println("Incorrect header (" + data.substring(0, 4) + ")" );
 	} //--end of unpack() mehtod--
 	
 }
