@@ -155,4 +155,52 @@ public class SS_GameEngine
 			}
 		}
 	}
+	
+	private ArrayList calculateScore() {
+
+		for(int p = 0; p < roster.getRoster().size(); p++) 
+		{
+			ClientInfo player = roster.getRoster().get(p);
+			int fuelComp = 0;
+			int materialComp = 0;
+			int planetComp = 0;
+			int techCompPlanet = 0;
+			int techCompShip = 0;
+			int shipComp = 0;
+			int scoredNow = 0;
+
+			materialComp = player.getMaterials();
+			fuelComp = player.getFuel();
+
+			for(int a = 0; a < theUniverse.getSectorWidth(); a++)
+			{
+				for(int b = 0; b < theUniverse.getSectorHeight(); b++)
+				{
+					for(Planet v : theUniverse.getSectors()[a][b].getPlanets())
+					{
+						if(v.getOwnerID() == p)
+							planetComp++;
+					}
+				}
+			}
+			techCompPlanet += Roster.theRoster.get(p).getTechnology().getFuelSpeed();
+			techCompPlanet += Roster.theRoster.get(p).getTechnology().getMineSpeed();
+
+			techCompShip += Roster.theRoster.get(p).getTechnology().getStealth();
+			techCompShip += Roster.theRoster.get(p).getTechnology().getSensors();
+
+			// shipComp += theRoster(a).getShips ??!!??
+			scoredNow = materialComp / 100 + fuelComp / 100 + planetComp * 10 + techCompPlanet + techCompShip + shipComp / 20;
+
+			if(scoreBoard.size() < p) {
+				scoreBoard.add(p, scoredNow);
+			}
+			else {
+				scoreBoard.set(p, scoredNow);
+			}
+
+		}
+
+		return scoreBoard;
+	}
 }
