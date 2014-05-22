@@ -31,7 +31,7 @@ public class ClientInfo implements Packable {
 
 	private int fuelPurchased = 0, matPurchased = 0, fuelSold = 0, matSold = 0;
 
-	private int myMoney = -1;
+	private int myFuel = -1, myMat = -1, myMoney = -1;
 	
 	private String myIP = "null";
 	private String clName = "Joe Smith";
@@ -100,9 +100,50 @@ public class ClientInfo implements Packable {
 		return myIP;
 	}
 
-	//TODO: public int getTotalFuel()
-	//TODO: public int getTotalMat()
-	//TODO: public int getMoney()
+	public int getFuel() {
+
+		return myFuel;
+	}
+	
+	public int getMat() {
+
+		return myMat;
+	}
+	
+	public int myMoney() {
+
+		return myMoney;
+	}
+	
+	public void updateFuel(int amount) {
+
+		this.myFuel += amount;
+	}
+	
+	public void updateMat(int amount) {
+
+		this.myMat += amount;
+	}
+	
+	public void updateMoney(int amount) {
+
+		this.myMoney += amount;
+	}
+
+	public void setFuel(int amount) {
+	
+		this.myFuel = amount;
+	}
+
+	public void setMat(int amount) {
+	
+		this.myMat = amount;
+	}
+
+	public void setMoney(int amount) {
+	
+		this.myMoney = amount;
+	}
 
 	@Override
 	public String pack() {
