@@ -8,26 +8,26 @@ package src.spacegame.server;
  * @version (051514)
  */
 public class ServerMessage {
-	// instance variables 
-	public int whoSent;
-	public String message;
 	
+	public int msgOwner;
+	public String message;
+
 	//Constructor
 	public ServerMessage(String msg, int from) {
-	
-		whoSent = from;
+
+		msgOwner = from;
 		message = msg;
 	}
-	
+
 	//Accessors
-	public int getWho() {
-	
-		return whoSent;
+	public int getOwner() {
+
+		return msgOwner;
 	}
-	
+
 	public String getMessage() {
-	
+
 		return message;
 	}
-	
+
 }
