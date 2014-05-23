@@ -20,6 +20,7 @@ public class ServerMessage {
 	}
 
 	//Accessors
+	//By owner we meant who sent, not who recieved
 	public int getOwner() {
 
 		return msgOwner;

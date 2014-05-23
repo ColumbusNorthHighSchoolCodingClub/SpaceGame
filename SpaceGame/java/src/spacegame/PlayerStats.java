@@ -6,7 +6,7 @@ public class PlayerStats implements Packable {
 
 	private static final String HEADER_CLASS = "STAT";
 
-	private final char PARSE_CHAR = '∑';
+	private final char PARSE_CHAR = '^';
 
 	private final String headerFuelPurch = "FPUR",
 			headerMatPurch = "MPUR",
