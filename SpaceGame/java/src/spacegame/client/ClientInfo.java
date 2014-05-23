@@ -98,6 +98,11 @@ public class ClientInfo implements Packable {
 		return myIP;
 	}
 
+	public PlayerStats getStats() {
+
+		return myStats;
+	}
+	
 	@Override
 	public String pack() {
 
