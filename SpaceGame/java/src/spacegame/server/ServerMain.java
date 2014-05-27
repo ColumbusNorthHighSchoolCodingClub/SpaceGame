@@ -20,6 +20,7 @@ public class ServerMain implements ActionListener //The Server-side main (MULTI_
 {	
 	private Timer timer;	//Timer that triggers the GameEngine to process a set of moves
 	private final int UPDATE_DELAY_IN_MSEC = 8000; //delay in mSec (60000)
+	SS_GameEngine engine = new SS_GameEngine();
 	
 	public void main(String[] args) throws IOException 
 	{
@@ -30,7 +31,7 @@ public class ServerMain implements ActionListener //The Server-side main (MULTI_
 	
 	public void runServer() throws IOException 
 	{
-		SS_GameEngine.initializeGame();
+		engine.initializeGame();
 		System.out.println("Universe and game initialized...");
 		initTimer();
 		System.out.println("Game Timer initialized...");		
@@ -66,6 +67,6 @@ public class ServerMain implements ActionListener //The Server-side main (MULTI_
 	public void actionPerformed(ActionEvent e) //--SEND/GET UPDATE(s) FROM SERVER--
 	{ 									 	//Called whenever timer goes off (every 60 sec.)
 		System.out.println("Processing the Server InBox (Timer event) ");
-		SS_GameEngine.processInbox();		
+		engine.processInbox();		
 	}
 }

@@ -45,6 +45,11 @@ public class SS_GameEngine
 		return theUniverse.pack();
 	}
 	
+	public String getPackedRoster() {
+
+		return roster.pack();
+	}
+	
 	public String getPackedMarket()
 	{
 		return theMarket.pack();
@@ -151,8 +156,8 @@ public class SS_GameEngine
 					//double fuelZ = 0;
 					//materialsZ += (player.getTechnology().getMineSpeed() * .05 + .2) * v.getMat();
 					//fuelZ += (player.getTechnology().getFuelSpeed() * .05 + .2) * v.getFuel();
-					player.setMat((int) (player.getMat() + ((player.getTechnology().getMineSpeed() * .05 + .2) * v.getMat())));
-					player.setFuel((int) (player.getTechnology().getFuelSpeed() * .05 + .2) * v.getFuel());
+					player.setMat((int) (player.getMat() + ((player.getStats().getMineSpeed() * .05 + .2) * v.getMat())));
+					player.setFuel((int) (player.getStats().getFuelSpeed() * .05 + .2) * v.getFuel());
 				}
 			}
 		}
@@ -185,11 +190,11 @@ public class SS_GameEngine
 					}
 				}
 			}
-			techCompPlanet += player.getTechnology().getFuelSpeed();
-			techCompPlanet += player.getTechnology().getMineSpeed();
+			techCompPlanet += player.getStats().getFuelSpeed();
+			techCompPlanet += player.getStats().getMineSpeed();
 
-			techCompShip += player.getTechnology().getStealth();
-			techCompShip += player.getTechnology().getSensors();
+			techCompShip += player.getStats().getStealth();
+			techCompShip += player.getStats().getSensors();
 
 			// shipComp += theRoster(a).getShips ??!!??
 			scoredNow = materialComp / 100 + fuelComp / 100 + planetComp * 10 + techCompPlanet + techCompShip + shipComp / 20;
@@ -251,7 +256,7 @@ public class SS_GameEngine
 				//for(int w = 0; w < theUniverse.getSectors()[col][row].getShips().size(); w++) {
 				for(Ship w : theUniverse.getSectors()[col][row].getShips()) {
 					if(col == w.getDestX())
-					{
+					{	
 						//do nothing
 					}
 					else if(col < w.getDestX())

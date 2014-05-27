@@ -13,6 +13,7 @@ public class SS_Thread extends Thread {
 	//--private instance variables--
 	private int myNumber = 0; //Which connection number am I?
 	private GenericComm comm = null; //Generic communication object
+	SS_GameEngine engine = new SS_GameEngine();
 	
 	public SS_Thread(Socket socket) //Constructor
 	{
@@ -56,13 +57,13 @@ public class SS_Thread extends Thread {
 		
 		public void addToGameEngineInBox(String in) {
 			
-			SS_GameEngine.addToInbox(in, myNumber);
+			engine.addToInbox(in, myNumber);
 		}
 		
 		public void sendUniverseUpdate() {
 			
-			comm.sendMessage(SS_GameEngine.getPackedUniverse());
-			comm.sendMessage(SS_GameEngine.getPackedRoster());
-			comm.sendMessage(SS_GameEngine.getPackedMarket());
+			comm.sendMessage(engine.getPackedUniverse());
+			comm.sendMessage(engine.getPackedRoster());
+			comm.sendMessage(engine.getPackedMarket());
 		}
 }
