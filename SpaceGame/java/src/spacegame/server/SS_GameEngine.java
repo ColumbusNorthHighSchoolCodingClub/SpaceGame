@@ -246,7 +246,7 @@ public class SS_GameEngine
 //
 //				// System.out.println("Ship info!" + theUniverse.getSector(a , b).ships.getNumShips());  FIX THIS
 //			}
-//		}
+//		} 
 	}
 	
 	public void MoveShips() {
@@ -255,11 +255,11 @@ public class SS_GameEngine
 			for(int col = 0; col < theUniverse.getSectorWidth(); col++) {
 				//for(int w = 0; w < theUniverse.getSectors()[col][row].getShips().size(); w++) {
 				for(Ship w : theUniverse.getSectors()[col][row].getShips()) {
-					if(col == w.getDestX())
+					if(col == w.getDestination().getX)
 					{	
 						//do nothing
 					}
-					else if(col < w.getDestX())
+					else if(col < w.getDestination().getX)
 					{
 						//move right
 					}
@@ -268,11 +268,11 @@ public class SS_GameEngine
 						//move left
 					}
 					
-					if(row == w.getDestY())
+					if(row == w.getDestination().getY)
 					{
 						//do nothing
 					}
-					else if(row < w.getDestY())
+					else if(row < w.getDestination().getY)
 					{
 						//move down
 					}
