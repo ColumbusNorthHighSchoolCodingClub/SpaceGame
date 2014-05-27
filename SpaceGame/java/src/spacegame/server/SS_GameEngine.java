@@ -255,11 +255,11 @@ public class SS_GameEngine
 			for(int col = 0; col < theUniverse.getSectorWidth(); col++) {
 				//for(int w = 0; w < theUniverse.getSectors()[col][row].getShips().size(); w++) {
 				for(Ship w : theUniverse.getSectors()[col][row].getShips()) {
-					if(col == w.getDestination().getX)
+					if(col == w.getDestination().x)
 					{	
 						//do nothing
 					}
-					else if(col < w.getDestination().getX)
+					else if(col < w.getDestination().x)
 					{
 						//move right
 					}
@@ -268,11 +268,11 @@ public class SS_GameEngine
 						//move left
 					}
 					
-					if(row == w.getDestination().getY)
+					if(row == w.getDestination().y)
 					{
 						//do nothing
 					}
-					else if(row < w.getDestination().getY)
+					else if(row < w.getDestination().y)
 					{
 						//move down
 					}
