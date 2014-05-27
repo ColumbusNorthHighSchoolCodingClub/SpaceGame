@@ -57,6 +57,16 @@ public class PlayerStats implements Packable {
 		return sensorStat;
 	}
 	
+	public int getMineSpeed() {
+		
+		return miningSpeed;
+	}
+	
+	public int getFuelSpeed() {
+		
+		return fuelSpeed;
+	}
+	
 	public void updateStealthStat(int amount) {
 
 		this.stealthStat += amount;
@@ -65,6 +75,16 @@ public class PlayerStats implements Packable {
 	public void updateSensorStat(int amount) {
 	
 		this.sensorStat += amount;
+	}
+	
+	public void updateMineSpeed(int amount) {
+		
+		this.miningSpeed += amount;
+	}
+	
+	public void updateFuelSpeed(int amount) {
+		
+		this.fuelSpeed += amount;
 	}
 	
 	public void updateFuel(int amount) {
@@ -96,6 +116,8 @@ public class PlayerStats implements Packable {
 
 		this.myMoney = amount;
 	}
+	
+	
 	
 	@Override
 	public String pack() {
