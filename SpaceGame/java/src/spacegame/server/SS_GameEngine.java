@@ -156,8 +156,8 @@ public class SS_GameEngine
 					//double fuelZ = 0;
 					//materialsZ += (player.getTechnology().getMineSpeed() * .05 + .2) * v.getMat();
 					//fuelZ += (player.getTechnology().getFuelSpeed() * .05 + .2) * v.getFuel();
-					player.setMat((int) (player.getMat() + ((player.getStats().getMineSpeed() * .05 + .2) * v.getMat())));
-					player.setFuel((int) (player.getStats().getFuelSpeed() * .05 + .2) * v.getFuel());
+					player.setMat((int) (player.getMat() + ((player.getMineSpeed() * .05 + .2) * v.getMat())));
+					player.setFuel((int) (player.getFuelSpeed() * .05 + .2) * v.getFuel());
 				}
 			}
 		}
@@ -190,11 +190,11 @@ public class SS_GameEngine
 					}
 				}
 			}
-			techCompPlanet += player.getStats().getFuelSpeed();
-			techCompPlanet += player.getStats().getMineSpeed();
+			techCompPlanet += player.getFuelSpeed();
+			techCompPlanet += player.getMineSpeed();
 
-			techCompShip += player.getStats().getStealth();
-			techCompShip += player.getStats().getSensors();
+			techCompShip += player.getStealthStat();
+			techCompShip += player.getSensorsStat();
 
 			// shipComp += theRoster(a).getShips ??!!??
 			scoredNow = materialComp / 100 + fuelComp / 100 + planetComp * 10 + techCompPlanet + techCompShip + shipComp / 20;
