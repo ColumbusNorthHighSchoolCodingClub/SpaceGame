@@ -1,5 +1,6 @@
 package src.spacegame;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 public class Ship implements Packable {
@@ -14,7 +15,10 @@ public class Ship implements Packable {
 			headerLocX = "LOCX",
 			headerLocY = "LOCY";
 	
-	private int ownerID = -1, locX, locY;
+	Point dest = new Point(-1, -1),
+			coord = new Point(-1, -1);
+	
+	private int ownerID = -1;
 	private int myHP;
 	
 	public Ship(int ownerID) {
@@ -42,15 +46,24 @@ public class Ship implements Packable {
 		return ownerID;
 	}
 	
-	public int[] getCoord() {
+	public Point getCoord() {
 	
-		return new int[] { locX, locY };
+		return coord;
 	}
 	
 	public void setCoord(int x, int y) {
 	
-		this.locX = x;
-		this.locY = y;
+		coord.setLocation(x, y);
+	}
+
+	public Point getDestination() {
+
+		return dest;
+	}
+	
+	public void setDestination(int x, int y) {
+	
+		dest.setLocation(x, y);
 	}
 
 	public int getHP() {
@@ -70,8 +83,8 @@ public class Ship implements Packable {
 		
 		pack += headerOwner + ownerID + PARSE_CHAR;
 		pack += headerHP + myHP + PARSE_CHAR;
-		pack += headerLocX + locX + PARSE_CHAR;
-		pack += headerLocY + locY + PARSE_CHAR;
+		pack += headerLocX + coord.getX() + PARSE_CHAR;
+		pack += headerLocY + coord.getY() + PARSE_CHAR;
 		
 		return pack;
 	}
@@ -83,6 +96,8 @@ public class Ship implements Packable {
 
 		if(!parse.get(0).equals(HEADER_CLASS))
 			return;
+		
+		int x = -1, y = -1;
 
 		for(String str : parse) {
 			String subheader = str.substring(0, 4), info = str.substring(4);
@@ -92,11 +107,13 @@ public class Ship implements Packable {
 			else if(subheader.equals(headerHP))
 				myHP = Integer.parseInt(info);
 			else if(subheader.equals(headerLocX))
-				locX = Integer.parseInt(info);
+				x = Integer.parseInt(info);
 			else if(subheader.equals(headerLocY))
-				locY = Integer.parseInt(info);
+				y = Integer.parseInt(info);
 			else if(!subheader.equals(HEADER_CLASS))
 				System.out.println("Unknown Packed Info in Ship");
 		}
+		
+		coord = new Point(x, y);
 	}
 }
