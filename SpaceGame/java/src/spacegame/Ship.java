@@ -14,10 +14,10 @@ public class Ship implements Packable {
 			headerHP = "MYHP",
 			headerLocX = "LOCX",
 			headerLocY = "LOCY";
-	
+
 	Point dest = new Point(-1, -1),
 			coord = new Point(-1, -1);
-	
+
 	private int ownerID = -1;
 	private int myHP;
 	
