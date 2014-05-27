@@ -10,7 +10,7 @@ import src.spacegame.client.gui.GuiDebug;
 import src.spacegame.client.gui.GuiInGame;
 import src.spacegame.client.gui.GuiMainMenu;
 import src.spacegame.old.Debug;
-import src.spacegame.old.SS_Main;
+import src.spacegame.server.ServerMain;
 import com.arcadeengine.AnimPanel;
 import com.arcadeengine.KeyBinding;
 import com.arcadeengine.gui.TransitionType;
@@ -23,7 +23,7 @@ public class ClientMain extends AnimPanel {
 
 	private KeyBinding binding;
 
-	private SS_Main locServer;
+	private ServerMain locServer;
 	
 	private ClientInfo clInfo;
 	private ClientComm clComm;
@@ -125,10 +125,10 @@ public class ClientMain extends AnimPanel {
 				public void run() {
 				
 					Debug.msg("Starting up server...");
-					locServer = new SS_Main();
+					locServer = new ServerMain();
 					try {
 						serverRunning = true;
-						locServer.runTheGameServer();
+						locServer.runServer();
 					}
 					catch(IOException e) {
 						
