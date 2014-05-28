@@ -111,17 +111,13 @@ public class Planet implements Packable {
 		if(!parse.get(0).equals(HEADER_CLASS))
 			return;
 
-		this.myType = PlanetType.ADANMA;
-
 		for(String str : parse) {
 			String subheader = str.substring(0, 4), info = str.substring(4);
 
 			if(subheader.equals(headerOwner))
 				this.ownerID = Integer.parseInt(info);
-			else if(subheader.equals(headerPlntType)) {
-				System.out.println(info);
+			else if(subheader.equals(headerPlntType))
 				this.myType = PlanetType.valueOf(info);
-			}
 			else if(!subheader.equals(HEADER_CLASS))
 				System.out.println("Unknown Packed Info in Planet");
 		}
