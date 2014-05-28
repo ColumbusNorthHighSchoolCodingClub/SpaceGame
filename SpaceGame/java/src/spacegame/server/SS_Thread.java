@@ -60,7 +60,7 @@ public class SS_Thread extends Thread {
 		}
 		
 		public void sendClientUpdate() {
-			comm.sendMessage(engine.gettoaster().getRoster().get(myNumber).pack());
+			comm.sendMessage(engine.getRoster().getPlayers().get(myNumber).pack());
 			
 		}
 }

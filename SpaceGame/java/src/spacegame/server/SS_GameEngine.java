@@ -41,7 +41,7 @@ public class SS_GameEngine
 		inbox.add(new ServerMessage(msg, from));
 	}
 	
-	public Roster gettoaster()
+	public Roster getRoster()
 	{
 		return roster;
 	}
@@ -117,7 +117,7 @@ public class SS_GameEngine
 	
 	private void processShipUpgrade(ServerMessage in) 
 	{
-		ClientInfo temp = roster.getRoster().get(in.getOwner());
+		ClientInfo temp = roster.getPlayers().get(in.getOwner());
 //		temp.getShipStats().unpack(in.getMessage());
 //		roster.getPlayer(in.getWho()).getShipStats().unpack(in.getMessage());
 		//Take care of cost.
@@ -142,7 +142,7 @@ public class SS_GameEngine
 
 		ClientInfo newPlayer = new ClientInfo();
 		newPlayer.setName(message);
-		newPlayer.setID(roster.getRoster().size());
+		newPlayer.setID(roster.getPlayers().size());
 		newPlayer.setMarket(theMarket);
 		newPlayer.setUniverse(theUniverse);
 		PlayerStats newstats = new PlayerStats();
@@ -151,7 +151,7 @@ public class SS_GameEngine
 		roster.addPlayer(newPlayer);
 		startUpPlayerGeneration(who);
 
-		System.out.println("Done with new Login.  New Roster Size = " + roster.getRoster().size());
+		System.out.println("Done with new Login.  New Roster Size = " + roster.getPlayers().size());
 	}
 	
 	private void updateSupplies() 
@@ -163,7 +163,7 @@ public class SS_GameEngine
 				for(Planet v : theUniverse.getSectors()[a][b].getPlanets())
 				{
 					int playerID = v.getOwnerID();
-					PlayerStats player = roster.getRoster().get(playerID).getStats();
+					PlayerStats player = roster.getPlayers().get(playerID).getStats();
 					//double materialsZ = ;
 					//double fuelZ = 0;
 					//materialsZ += (player.getTechnology().getMineSpeed() * .05 + .2) * v.getMat();
@@ -177,9 +177,9 @@ public class SS_GameEngine
 	
 	private ArrayList calculateScore() {
 
-		for(int p = 0; p < roster.getRoster().size(); p++) 
+		for(int p = 0; p < roster.getPlayers().size(); p++) 
 		{
-			PlayerStats player = roster.getRoster().get(p).getStats();
+			PlayerStats player = roster.getPlayers().get(p).getStats();
 			int fuelComp = 0;
 			int materialComp = 0;
 			int planetComp = 0;
