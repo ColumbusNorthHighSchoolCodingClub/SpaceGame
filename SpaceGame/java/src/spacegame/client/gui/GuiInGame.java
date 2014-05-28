@@ -3,6 +3,7 @@ package src.spacegame.client.gui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.geom.Rectangle2D;
 import src.spacegame.client.ClientMain;
 import com.arcadeengine.AnimPanel;
 import com.arcadeengine.gui.Gui;
@@ -22,10 +23,21 @@ public class GuiInGame extends Gui {
 	@Override
 	public void drawGui(Graphics g) {
 	
-		g.setColor(new Color(48, 48, 48, 150));
-		g.fillRect(0, 0, clMain.getWidth(), 40);
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, clMain.getWidth(), clMain.getHeight());
 
-		this.drawString("Player: " + clMain.getClientInfo().getName(), new Font("Arial", Font.BOLD, 12), Color.white, 5, 15, g);
+		g.setColor(new Color(90, 90, 90, 150));
+		g.fillRect(0, 0, clMain.getWidth(), 40);
+		
+		Font font = new Font("Tw Cen MT Condensed Extra Bold", Font.PLAIN, 22);
+
+		g.setFont(font);
+
+		String plyName = "Player: " + clMain.getClientInfo().getName();
+		
+		Rectangle2D rect = g.getFontMetrics().getStringBounds(plyName, g);
+
+		this.drawString(plyName, font, Color.white, 5, (int) rect.getHeight() - 2, g);
 		
 		this.drawComponents(g, (panel.getWidth() / 2) - 100, 175);
 	}

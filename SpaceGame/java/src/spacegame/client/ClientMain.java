@@ -161,22 +161,32 @@ public class ClientMain extends AnimPanel {
 		this.drawGui(g);
 		return g;
 	}
-	
+
+	private boolean requestSent = true;
+
 	@Override
 	public void process() {
 	
 		if(System.currentTimeMillis() % UPDATE_DELAY == 0 && clComm != null) {
 			if(clComm.isConnected()) {
-				clComm.addMessage("REQU");
+
+				if(!requestSent) {
+					clComm.addMessage("REQU");
+					requestSent = true;
+				}
+				
 				clComm.sendMessages();
-
 				ArrayList<String> msgs = clComm.getAllMessages();
-
+				
 				for(String msg : msgs) {
 					String header = msg.substring(0, 4);
 					
-					//	if(header.equals(Universe.getHeader()))
+					System.out.println(header);
 					
+					if(header.equals(ClientInfo.getHeader()))
+						clInfo.unpack(header);
+
+					requestSent = false;
 				}
 			}
 		}
