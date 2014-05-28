@@ -36,8 +36,14 @@ public class SS_GameEngine
 	}
 	
 	public void addToInbox(String msg, int from)
+
 	{
 		inbox.add(new ServerMessage(msg, from));
+	}
+	
+	public Roster gettoaster()
+	{
+		return roster;
 	}
 	
 	public String getPackedUniverse()
@@ -134,7 +140,13 @@ public class SS_GameEngine
 
 		System.out.println("Processing new Login! - " + message);
 
-		ClientInfo newPlayer = new ClientInfo(message);
+		ClientInfo newPlayer = new ClientInfo();
+		newPlayer.setName(message);
+		newPlayer.setID(roster.getRoster().size());
+		newPlayer.setMarket(theMarket);
+		newPlayer.setUniverse(theUniverse);
+		PlayerStats newstats = new PlayerStats();
+		newPlayer.setPlayerStats(newstats);
 
 		roster.addPlayer(newPlayer);
 		startUpPlayerGeneration(who);

@@ -32,14 +32,13 @@ public class SS_Thread extends Thread {
 		public void run() {
 		
 			String inputLine, outputLine;
-			comm.sendMessage("SERV-" + myNumber); //Send the client their playerNum
 			//         outBox.add("SS: Hello, you are connection #"+myNumber); //Send a welcome. 
 			//This loop constantly waits for input from Client and responds...
 			//----------------------------------------------------------------
 			while ((inputLine = comm.getMessage()) != null) {
 				//When the user requests an update of the universe, send it to them.  
 				if (inputLine.substring(0, 4).equals("REQU"))
-					sendUniverseUpdate();
+					sendClientUpdate();
 				
 				else
 					//Put this into the to-do list for the game engine.
@@ -60,10 +59,8 @@ public class SS_Thread extends Thread {
 			engine.addToInbox(in, myNumber);
 		}
 		
-		public void sendUniverseUpdate() {
+		public void sendClientUpdate() {
+			comm.sendMessage(engine.gettoaster().getRoster().get(myNumber).pack());
 			
-			comm.sendMessage(engine.getPackedUniverse());
-			comm.sendMessage(engine.getPackedRoster());
-			comm.sendMessage(engine.getPackedMarket());
 		}
 }
