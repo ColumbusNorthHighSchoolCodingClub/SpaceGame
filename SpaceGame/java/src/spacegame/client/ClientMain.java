@@ -167,15 +167,16 @@ public class ClientMain extends AnimPanel {
 	
 		if(System.currentTimeMillis() % UPDATE_DELAY == 0 && clComm != null) {
 			if(clComm.isConnected()) {
-				clComm.addMessage("REQUEST");
+				clComm.addMessage("REQU");
 				clComm.sendMessages();
 
 				ArrayList<String> msgs = clComm.getAllMessages();
 
 				for(String msg : msgs) {
 					String header = msg.substring(0, 4);
-
-					System.out.println(header);
+					
+					//	if(header.equals(Universe.getHeader()))
+					
 				}
 			}
 		}
