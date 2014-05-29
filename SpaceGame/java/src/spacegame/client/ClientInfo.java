@@ -169,8 +169,14 @@ public class ClientInfo implements Packable {
 		for(String str : parse) {
 			String subheader = str.substring(0, 4), info = str.substring(4);
 			
-			if(subheader.equals(Universe.getHeader()))
-				univ.unpack(info);
+			if(subheader.equals(Universe.getHeader())) {
+				
+				if(univ == null)
+					univ = new Universe(str);
+				else
+					univ.unpack(str);
+			}
+			
 			else if(subheader.equals(Ship.getHeader()))
 				myShips.add(new Ship(info));
 			else if(subheader.equals(headerIP))
@@ -182,7 +188,7 @@ public class ClientInfo implements Packable {
 			else if(subheader.equals(headerPlayerStats))
 				myStats.unpack(info);
 			else if(!subheader.equals(HEADER_CLASS))
-				System.out.println("Unknown Packed Info in ClientInfo");
+				System.out.println("Unknown Packed Info in ClientInfo" + info);
 
 		}
 
