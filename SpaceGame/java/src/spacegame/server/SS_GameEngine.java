@@ -147,7 +147,7 @@ public class SS_GameEngine
 		System.out.println("Processing new Login! - " + message);
 
 		ClientInfo newPlayer = new ClientInfo();
-		newPlayer.setName(message);
+		newPlayer.setName(message.substring(5));
 		newPlayer.setID(roster.getPlayers().size());
 		newPlayer.setMarket(theMarket);
 		newPlayer.setUniverse(theUniverse);
@@ -275,14 +275,15 @@ public class SS_GameEngine
 		for(int row = 0; row < theUniverse.getSectorHeight(); row++) {
 			for(int col = 0; col < theUniverse.getSectorWidth(); col++) {
 				//for(int w = 0; w < theUniverse.getSectors()[col][row].getShips().size(); w++) {
-				for(Ship w : theUniverse.getSectors()[col][row].getShips()) {
+				for(int i = 0; i <= theUniverse.getSectors()[col][row].getShips().size(); i++) {
+					Ship w = theUniverse.getSectors()[col][row].getShips().get(i);
 					if(col == w.getDestination().x)
 					{
 						//do nothing
 					}
 					else if(col < w.getDestination().x)
 					{
-						//move right
+						theUniverse.getSector(col + 1, row).ships.add(theUniverse.getSector(col, row).ships.remove(w))
 					}
 					else
 					{
