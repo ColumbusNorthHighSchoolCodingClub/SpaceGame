@@ -14,4 +14,10 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<variableList>
+		<variable>
+			<name>PROJECT_LOC</name>
+			<value>$%7BPARENT-2-ECLIPSE_HOME%7D/Documents/School/Programming/eclipse/git/SpaceGame/SpaceGame</value>
+		</variable>
+	</variableList>
 </projectDescription>

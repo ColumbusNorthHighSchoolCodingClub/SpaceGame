@@ -27,7 +27,7 @@ public class ClientMain extends AnimPanel {
 	private ClientInfo clInfo;
 	private ClientComm clComm;
 	
-	private boolean serverRunning = false;
+	private boolean serverRunning = false, requestSent = true;
 	
 	public ClientMain() {
 	
@@ -51,7 +51,7 @@ public class ClientMain extends AnimPanel {
 	public void initRes() {
 	
 	}
-
+	
 	public void initBindings() {
 
 		binding = new KeyBinding(this) {
@@ -83,12 +83,12 @@ public class ClientMain extends AnimPanel {
 			@Override
 			public void run() {
 
-				if(ipAddress == null)
-					return;
-				
-				if(ipAddress.length() - ipAddress.replace(".", "").length() != 3)
-					return;
+				if(ipAddress.length() - ipAddress.replace(".", "").length() != 3) {
 
+					JOptionPane.showMessageDialog(null, "Invalid Address Given!");
+					return;
+				}
+				
 				try {
 					Socket socket = new Socket(ipAddress, 4444);
 					ClientMain.this.clComm = new ClientComm(ClientMain.this, socket);
@@ -97,9 +97,11 @@ public class ClientMain extends AnimPanel {
 					ClientMain.this.getGuiHandler().switchGui(new GuiInGame(ClientMain.this), TransitionType.fade);
 				}
 				catch(UnknownHostException e) {
+					JOptionPane.showMessageDialog(null, "Unable to Connect to host. Invalid IP or Network Access Doesn't Exist.");
 					System.err.println("Unable to Connect to host. Invalid IP or Network Access Doesn't Exist.");
 				}
 				catch(IOException e) {
+					JOptionPane.showMessageDialog(null, "Unable to Connect to host. Invalid IP or Network Access Doesn't Exist.");
 					System.err.println("IOException in method connectToServer in class ClientMain");
 				}
 				
@@ -162,8 +164,6 @@ public class ClientMain extends AnimPanel {
 		return g;
 	}
 
-	private boolean requestSent = true;
-
 	@Override
 	public void process() {
 	
@@ -184,7 +184,7 @@ public class ClientMain extends AnimPanel {
 					System.out.println(header);
 					
 					if(header.equals(ClientInfo.getHeader()))
-						clInfo.unpack(header);
+						clInfo.unpack(msg);
 
 					requestSent = false;
 				}
