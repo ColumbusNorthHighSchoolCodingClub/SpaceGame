@@ -68,10 +68,11 @@ public class GuiDebug extends Gui {
 		catch(UnknownHostException e) {
 		}
 
-		String isConnected = "Connected To a Server: false", sectW = "Universe Width: N/A", sectH = "Universe Height: N/A";
+		String isConnected = "Connected To a Server: false", playerNum = "Player Number: N/A", sectW = "Universe Width: N/A", sectH = "Universe Height: N/A";
 
 		if(clMain.getClientInfo().getUniverse() != null) {
 			isConnected = "Connected To a Server: " + clMain.getClientComm().isConnected();
+			playerNum = "Player Number: " + clMain.getClientInfo().getID();
 			sectW = "Universe Width: " + clMain.getClientInfo().getUniverse().getSectorWidth();
 			sectH = "Universe Height: " + clMain.getClientInfo().getUniverse().getSectorHeight();
 		}
@@ -85,6 +86,7 @@ public class GuiDebug extends Gui {
 				"Running Local Server: " + clMain.isServerRunning(),
 				addBreak,
 				isConnected,
+				playerNum,
 				sectW,
 				sectH,
 				addBreak,

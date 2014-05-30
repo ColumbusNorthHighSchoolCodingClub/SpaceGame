@@ -152,7 +152,7 @@ public class ClientInfo implements Packable {
 		pack += headerName + clName + PARSE_CHAR;
 		pack += headerID + clID + PARSE_CHAR;
 		pack += headerPlayerStats + myStats.pack() + PARSE_CHAR;
-		
+
 		return pack;
 	}
 
@@ -170,7 +170,6 @@ public class ClientInfo implements Packable {
 			String subheader = str.substring(0, 4), info = str.substring(4);
 			
 			if(subheader.equals(Universe.getHeader())) {
-				
 				if(univ == null)
 					univ = new Universe(str);
 				else

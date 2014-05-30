@@ -28,7 +28,7 @@ public class Sector implements Packable {
 		Random rand = new Random();
 
 		for(int loop = 0; loop < 3; loop++)
-			if(rand.nextInt(2) == 0)
+			if(rand.nextInt(20) % 3 == 0)
 				planets.add(new Planet(-1));
 		
 	}

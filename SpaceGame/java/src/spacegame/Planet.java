@@ -28,6 +28,21 @@ public class Planet implements Packable {
 		this.ownerID = ownerID;
 
 		//TODO: Make Type Selection Based on Rarity of Planet
+		for(int loop = 0; myType == null; loop++) {
+			
+			PlanetType type = PlanetType.values()[loop];
+			
+			double r = Math.random();
+			if(r < type.getRarity()) {
+				myType = type;
+				System.out.println("Drop Num:" + r);
+				System.out.println("  --Rarity:" + type.getRarity());
+			}
+			
+			if(loop + 1 == PlanetType.values().length)
+				loop = -1;
+		}
+		
 		myType = PlanetType.values()[rand.nextInt(PlanetType.values().length)];
 
 		offenseStat = myType.getBaseOffense() + rand.nextInt(11);

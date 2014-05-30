@@ -7,12 +7,11 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import src.spacegame.client.gui.GuiDebug;
-import src.spacegame.client.gui.GuiInGame;
+import src.spacegame.client.gui.GuiLoadingGame;
 import src.spacegame.client.gui.GuiMainMenu;
 import src.spacegame.server.ServerMain;
 import com.arcadeengine.AnimPanel;
 import com.arcadeengine.KeyBinding;
-import com.arcadeengine.gui.TransitionType;
 
 public class ClientMain extends AnimPanel {
 	
@@ -94,7 +93,7 @@ public class ClientMain extends AnimPanel {
 					ClientMain.this.clComm = new ClientComm(ClientMain.this, socket);
 					ClientMain.this.clInfo.init();
 
-					ClientMain.this.getGuiHandler().switchGui(new GuiInGame(ClientMain.this), TransitionType.fade);
+					ClientMain.this.getGuiHandler().switchGui(new GuiLoadingGame(ClientMain.this));
 				}
 				catch(UnknownHostException e) {
 					JOptionPane.showMessageDialog(null, "Unable to Connect to host. Invalid IP or Network Access Doesn't Exist.");
@@ -180,8 +179,6 @@ public class ClientMain extends AnimPanel {
 				
 				for(String msg : msgs) {
 					String header = msg.substring(0, 4);
-					
-					System.out.println(header);
 					
 					if(header.equals(ClientInfo.getHeader()))
 						clInfo.unpack(msg);
