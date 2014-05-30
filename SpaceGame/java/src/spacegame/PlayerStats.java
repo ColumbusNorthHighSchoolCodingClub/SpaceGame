@@ -32,6 +32,11 @@ public class PlayerStats implements Packable {
 	
 	}
 	
+	public static String getHeader() {
+		
+		return HEADER_CLASS;
+	}
+	
 	public int getFuel() {
 	
 		return myFuel;

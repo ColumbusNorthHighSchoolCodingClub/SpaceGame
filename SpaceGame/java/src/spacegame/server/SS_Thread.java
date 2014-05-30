@@ -2,6 +2,8 @@ package src.spacegame.server;
 
 import java.net.Socket;
 import java.util.ArrayList;
+
+import src.spacegame.PlayerStats;
 import src.spacegame.old.GenericComm;
 
 public class SS_Thread extends Thread {
@@ -30,31 +32,31 @@ public class SS_Thread extends Thread {
 	//---------------------------------------------------------------
 	@Override
 	public void run() {
-
+		
 		String inputLine, outputLine;
-		//         outBox.add("SS: Hello, you are connection #"+myNumber); //Send a welcome.
+		comm.sendMessage("SERV-" + myNumber); //Send the client their playerNum
+		//         outBox.add("SS: Hello, you are connection #"+myNumber); //Send a welcome. 
 		//This loop constantly waits for input from Client and responds...
 		//----------------------------------------------------------------
-		while((inputLine = comm.getMessage()) != null) {
-			//When the user requests an update of the universe, send it to them.
-			if(inputLine.substring(0, 4).equals("REQU"))
+		while ((inputLine = comm.getMessage()) != null) {
+			//When the user requests an update of the universe, send it to them.  
+			if (inputLine.substring(0, 4).equals("REQU"))
 				sendClientUpdate();
-			else if(inputLine.substring(0, 4).equals("LOGI")) {
-				engine.processNewLogin(new ServerMessage(inputLine, myNumber));
-				sendClientUpdate();
-			}
+			
 			else
+				//Put this into the to-do list for the game engine.
 				engine.addToInbox(inputLine, myNumber);
-
-			//If the user is leaving the game, end the thread?...
-			if(inputLine.equals("Bye"))
+			
+			//If the user is leaving the game, end the thread?... 
+			if (inputLine.equals("Bye"))
 				break;
 		}
-
+		
 		//Clean things up by closing streams and sockets.
 		//-----------------------------------------------
 		comm.closeNicely();
 	} //--end of run() method--
+	
 
 	public void sendClientUpdate() {
 

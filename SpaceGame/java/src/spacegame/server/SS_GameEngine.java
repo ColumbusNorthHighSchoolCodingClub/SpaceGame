@@ -73,17 +73,17 @@ public class SS_GameEngine
 			if(header.equals("REQU")) //Send the universe, etc...
 				System.out.println("Requests should've been handled in SS_Thread! ugh.");
 			else if(header.equals("MOVE")) //Process a move request
-				processMoveRequest(message.getMessage());
+				processMoveRequest(message);
 			else if(header.equals("BUYY"))//Process a market buy
 				processPurchaseRequest(message);
 			else if(header.equals("SELL"))//Process a market sell
 				processSellRequest(message);
 			else if(header.equals("SHIP"))//Process a ship upgrade
 				processShipUpgrade(message);
-			else if(header.equals("TECH"))//Process a technology upgrade
-				processTechnologyUpgrade(message.getMessage());
+			else if(header.equals(PlayerStats.getHeader()))//Process a technology upgrade
+				processTechnologyUpgrade(message);
 			else if(header.equals("ALLY"))//Process a new alliance
-				processNewAlliance(message.getMessage());
+				processNewAlliance(message);
 			else if(header.equals("LOGI"))//Process a new login
 				processNewLogin(message);
 			else
@@ -97,7 +97,7 @@ public class SS_GameEngine
 	//The next few methods all process the different actions that
 	//can occur in the universe
 
-	private void processMoveRequest(String in)
+	private void processMoveRequest(ServerMessage in)
 	{
 
 		//This method (will) receive a packed Ships object and updates the universe to match the request.
@@ -128,12 +128,12 @@ public class SS_GameEngine
 		//Take care of cost.
 	}
 
-	private void processTechnologyUpgrade(String in)
+	private void processTechnologyUpgrade(ServerMessage in)
 	{
 
 	}
 
-	private void processNewAlliance(String in)
+	private void processNewAlliance(ServerMessage in)
 	{
 
 	}
@@ -271,23 +271,24 @@ public class SS_GameEngine
 	}
 
 	public void MoveShips() {
-
 		for(int row = 0; row < theUniverse.getSectorHeight(); row++) {
 			for(int col = 0; col < theUniverse.getSectorWidth(); col++) {
 				//for(int w = 0; w < theUniverse.getSectors()[col][row].getShips().size(); w++) {
 				for(int i = 0; i <= theUniverse.getSectors()[col][row].getShips().size(); i++) {
 					Ship w = theUniverse.getSectors()[col][row].getShips().get(i);
-					if(col == w.getDestination().x)
+					theUniverse.getSectors()[w.getDestination().x][w.getDestination().y].getShips().add(theUniverse.getSectors()[col][row].getShips().remove(i));
+					//should be unnessecary now, leaving in case current code dosent work
+		/*			if(col == w.getDestination().x)
 					{
 						//do nothing
 					}
 					else if(col < w.getDestination().x)
 					{
-						theUniverse.getSector(col + 1, row).ships.add(theUniverse.getSector(col, row).ships.remove(w))
+						theUniverse.getSectors()[w.getDestination().x][row].getShips().add(theUniverse.getSectors()[col][row].getShips().remove(i));
 					}
 					else
 					{
-						//move left
+						theUniverse.getSectors()[col-1][row].getShips().add(theUniverse.getSectors()[col][row].getShips().remove(i));
 					}
 
 					if(row == w.getDestination().y)
@@ -296,51 +297,14 @@ public class SS_GameEngine
 					}
 					else if(row < w.getDestination().y)
 					{
-						//move down
+						theUniverse.getSectors()[col][w.getDestination().y].getShips().add(theUniverse.getSectors()[col][row].getShips().remove(i));
 					}
 					else
 					{
-						//move up
-					}
-
-					//nasty old code to be removed onc eclass is fixed
-					//					if(w.hasMoved == false) {
-					//						if(col == theUniverse.getSector(col, row).ships.get(w).getDestX() && row == theUniverse.getSector(col, row).ships.get(w).getDestY()) {
-					//							System.out.println("Not moving");
-					//						}
-					//						if(col < theUniverse.getSector(col, row).ships.get(w).getDestX()) {
-					//							theUniverse.getSector(col, row).ships.get(w).hasMoved = true;
-					//							theUniverse.getSector(col + 1, row).ships.add(theUniverse.getSector(col, row).ships.get(w));
-					//							theUniverse.getSector(col, row).ships.remove(w);
-					//						}
-					//						if(col > theUniverse.getSector(col, row).ships.get(w).getDestX()) {
-					//							theUniverse.getSector(col, row).ships.get(w).hasMoved = true;
-					//							theUniverse.getSector(col - 1, row).ships.add(theUniverse.getSector(col, row).ships.get(w));
-					//							theUniverse.getSector(col, row).ships.remove(w);
-					//						}
-					//						if(row < theUniverse.getSector(col, row).ships.get(w).getDestY()) {
-					//							theUniverse.getSector(col, row).ships.get(w).hasMoved = true;
-					//							theUniverse.getSector(col, row + 1).ships.add(theUniverse.getSector(col, row).ships.get(w));
-					//							theUniverse.getSector(col, row).ships.remove(w);
-					//						}
-					//						if(row > theUniverse.getSector(col, row).ships.get(w).getDestY()) {
-					//							theUniverse.getSector(col, row).ships.get(w).hasMoved = true;
-					//							theUniverse.getSector(col, row - 1).ships.add(theUniverse.getSector(col, row).ships.get(w));
-					//							theUniverse.getSector(col, row).ships.remove(w);
-					//						}
-					//					}
-
+						theUniverse.getSectors()[col][row-1].getShips().add(theUniverse.getSectors()[col][row].getShips().remove(i));
+					}*/
 				}
 			}
-			// put your code here
 		}
-		//more nasty code
-		//		for(int row = 0; row < theUniverse.getSectorHeight(); row++) {
-		//			for(int col = 0; col < theUniverse.getSectorWidth(); col++) {
-		//				for(int w = 0; w < theUniverse.getSector(col, row).ships.size(); w++) {
-		//					theUniverse.getSector(col, row).ships.get(w).hasMoved = false;
-		//				}
-		//			}
-		//		}
 	}
 }
