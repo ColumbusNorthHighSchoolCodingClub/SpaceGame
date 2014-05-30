@@ -93,8 +93,8 @@ public class Universe implements Packable {
 	
 		ArrayList<String> parse = ParseUtil.parseString(data, PARSE_CHAR);
 
-		if(!parse.get(0).equals(HEADER_CLASS))
-			return;
+		/*if(!parse.get(0).equals(HEADER_CLASS))
+			return;*/
 
 		for(String str : parse) {
 			String header = str.substring(0, 4), info = str.substring(4);

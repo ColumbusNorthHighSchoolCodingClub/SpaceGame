@@ -76,9 +76,11 @@ public class SS_GameEngine
 				processMoveRequest(message);
 			else if(header.equals("BUYY"))//Process a market buy
 				processPurchaseRequest(message);
+			//else if(header.equals(Market.getHeader()))
+				
 			else if(header.equals("SELL"))//Process a market sell
 				processSellRequest(message);
-			else if(header.equals("SHIP"))//Process a ship upgrade
+			else if(header.equals(Ship.getHeader()))//Process a ship upgrade
 				processShipUpgrade(message);
 			else if(header.equals(PlayerStats.getHeader()))//Process a technology upgrade
 				processTechnologyUpgrade(message);
@@ -130,17 +132,16 @@ public class SS_GameEngine
 
 	private void processTechnologyUpgrade(ServerMessage in)
 	{
-
+		roster.getPlayers().get(in.getOwner()).getStats().unpack(in.getMessage());
 	}
 
 	private void processNewAlliance(ServerMessage in)
 	{
-
+		//alliances not implemented yet
 	}
 
 	public void processNewLogin(ServerMessage in)
 	{
-
 		int who = in.getOwner();
 		String message = in.getMessage();
 
@@ -162,7 +163,6 @@ public class SS_GameEngine
 
 	private void updateSupplies()
 	{
-
 		for(int a = 0; a < theUniverse.getSectorWidth(); a++)
 		{
 			for(int b = 0; b < theUniverse.getSectorHeight(); b++)
