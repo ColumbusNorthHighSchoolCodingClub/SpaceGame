@@ -123,8 +123,6 @@ public class GuiSlider extends GuiComponent {
 	@Override
 	public void draw(Graphics g) {
 
-		Graphics2D page = (Graphics2D) g;
-
 		this.draw(boxOutline.x, boxOutline.y, g);
 	}
 
@@ -199,18 +197,8 @@ public class GuiSlider extends GuiComponent {
 
 		int shad = 1;
 
-		g.setColor(secColor);
-		g.drawString(str, drawX, drawY);
-
-		g.drawString(str, drawX + 2, drawY);
-
-		g.drawString(str, drawX + 2, drawY + 2);
-
-		g.drawString(str, drawX, drawY + 2);
-
-		g.setColor(primColor.brighter());
-		g.drawString(str, drawX + shad, drawY + shad);
-
+		this.panel.getGuiHandler().getCurrentGui().drawString(str, font, primColor.brighter().brighter(), drawX, drawY, page);
+		
 		page.setFont(old);
 	}
 
