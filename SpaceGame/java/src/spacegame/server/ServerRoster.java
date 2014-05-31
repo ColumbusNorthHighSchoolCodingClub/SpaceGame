@@ -11,42 +11,42 @@ import java.util.ArrayList;
 public class ServerRoster
 {
 	private static final String HEADER_CLASS = "RSTR";
-	
+
 	private final String headerPlayerName = "NAME",
 			headerPlayerNumber = "NMBR",
 			headerBreak = "BREK";
-	
-	private static final char PARSE_CHAR = '$'; //The parse character for this class.
 
-	private ArrayList<SS_Thread> playerThreads;
+	private static final char PARSE_CHAR = '$'; //The parse character for this class.
 	
+	private ArrayList<SS_Thread> playerThreads;
+
 	public ServerRoster()
 	{
-	
+
 		this.playerThreads = new ArrayList<SS_Thread>();
 	}
-	
-	public static String getHeader() {
 
+	public static String getHeader() {
+	
 		return HEADER_CLASS;
 	}
-	
-	public static char getParseChar() {
 
+	public static char getParseChar() {
+	
 		return PARSE_CHAR;
 	}
-	
+
 	public void addThread(SS_Thread thread) {
-	
+
 		thread.start();
 		this.playerThreads.add(thread);
 	}
-
-	public ArrayList<SS_Thread> getThreads() {
 	
+	public ArrayList<SS_Thread> getThreads() {
+
 		return playerThreads;
 	}
-
+	
 	/**
 	 * The pack method converts the data from this class into a String
 	 * for transfer over the network.
@@ -54,16 +54,17 @@ public class ServerRoster
 	 * @return		the String to be transfered
 	 */
 	public String packClientRoster() {
-	
-		String out = HEADER_CLASS + PARSE_CHAR;
-		for(int q = 0; q < playerThreads.size(); q++) {
 
-			out += headerPlayerName + playerThreads.get(q).getClientInfo().getName() + PARSE_CHAR;
-			out += headerPlayerNumber + playerThreads.get(q).getClientInfo().getID() + PARSE_CHAR;
+		String out = HEADER_CLASS + PARSE_CHAR;
+
+		for(SS_Thread th : playerThreads) {
+
+			out += headerPlayerName + th.getClientInfo().getName() + PARSE_CHAR;
+			out += headerPlayerNumber + th.getClientInfo().getID() + PARSE_CHAR;
 			out += headerBreak + PARSE_CHAR;
 		}
 		
 		return out;
 	}
-	
+
 }

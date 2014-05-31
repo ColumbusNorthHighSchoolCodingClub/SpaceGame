@@ -15,8 +15,8 @@ import javax.swing.Timer;
  */
 public class ServerMain implements ActionListener //The Server-side main (MULTI_SERVER!)
 {
-	private Timer timer; //Timer that triggers the GameEngine to process a set of moves
-	private final int UPDATE_DELAY_IN_MSEC = 8000; //delay in mSec (60000)
+	private Timer timer;
+	private final int UPDATE_DELAY_IN_MSEC = 8000;
 	SS_GameEngine engine = new SS_GameEngine();
 	ServerSocket sendSocket;
 
@@ -27,7 +27,6 @@ public class ServerMain implements ActionListener //The Server-side main (MULTI_
 		System.out.println("Universe and game initialized...");
 		initTimer();
 		System.out.println("Game Timer initialized...");
-		ServerSocket sendSocket = null;
 		boolean listening = true;
 
 		try //Declare and establish the Server Socket...
@@ -61,12 +60,12 @@ public class ServerMain implements ActionListener //The Server-side main (MULTI_
 	public void stop() {
 	
 		this.timer.stop();
+
 		try {
 			sendSocket.close();
 		}
 		catch(IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Stopping Server...");
 		}
 	}
 
