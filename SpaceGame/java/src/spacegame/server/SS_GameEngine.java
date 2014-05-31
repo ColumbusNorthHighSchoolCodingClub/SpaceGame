@@ -5,7 +5,6 @@ import java.util.Random;
 import src.spacegame.Market;
 import src.spacegame.Planet;
 import src.spacegame.PlayerStats;
-import src.spacegame.Roster;
 import src.spacegame.Ship;
 import src.spacegame.Universe;
 import src.spacegame.client.ClientInfo;
@@ -22,54 +21,49 @@ public class SS_GameEngine
 	//a static array that each request to change the universe goes into...
 	private ArrayList<ServerMessage> inbox = new ArrayList<ServerMessage>();
 	private ArrayList<Integer> scoreBoard = new ArrayList<Integer>();
-	private Roster roster = new Roster();
+	private ServerRoster roster = new ServerRoster();
 	//The major game objects
 	private Universe theUniverse;
 	private Market theMarket;
-
+	
 	public void initializeGame()
 	{
-
+	
 		theUniverse = new Universe(10, 10);
 		theMarket = new Market();
 	}
-
+	
 	public void addToInbox(String msg, int from) {
-
+	
 		inbox.add(new ServerMessage(msg, from));
 	}
-
-	public Roster getRoster()
-	{
-
-		return roster;
-	}
-
-	public String getPackedUniverse()
-	{
-
-		return theUniverse.pack();
-	}
-
-	public String getPackedRoster() {
-
-		return roster.pack();
-	}
-
-	public String getPackedMarket()
-	{
-
-		return theMarket.pack();
-	}
-
-	public void processInbox()
+	
+	public ServerRoster getRoster()
 	{
 	
+		return roster;
+	}
+	
+	public Universe getUniverse()
+	{
+	
+		return theUniverse;
+	}
+	
+	public Market getMarket()
+	{
+	
+		return theMarket;
+	}
+	
+	public void processInbox()
+	{
+
 		for(int i = 0; i < inbox.size(); i++) //Loop through whole inbox
 		{
 			ServerMessage message = inbox.get(i);
 			String header = message.getMessage().substring(0, 4);
-			
+
 			if(header.equals("REQU")) //Send the universe, etc...
 				System.out.println("Requests should've been handled in SS_Thread! ugh.");
 			else if(header.equals("MOVE")) //Process a move request
@@ -77,7 +71,7 @@ public class SS_GameEngine
 			else if(header.equals("BUYY"))//Process a market buy
 				processPurchaseRequest(message);
 			//else if(header.equals(Market.getHeader()))
-				
+			
 			else if(header.equals("SELL"))//Process a market sell
 				processSellRequest(message);
 			else if(header.equals(Ship.getHeader()))//Process a ship upgrade
@@ -86,28 +80,26 @@ public class SS_GameEngine
 				processTechnologyUpgrade(message);
 			else if(header.equals("ALLY"))//Process a new alliance
 				processNewAlliance(message);
-			else if(header.equals("LOGI"))//Process a new login
-				processNewLogin(message);
 			else
 				System.out.println("<SS_Thread> Unexpected message format: " + message.getMessage());
-
+			
 			inbox.remove(i);
 			i--;
 		}
 	}
-
+	
 	//The next few methods all process the different actions that
 	//can occur in the universe
-
+	
 	private void processMoveRequest(ServerMessage in)
 	{
-
+	
 		//This method (will) receive a packed Ships object and updates the universe to match the request.
 	}
-
+	
 	private void processPurchaseRequest(ServerMessage in)
 	{
-
+	
 		//int cost = theMarket.unpack(in);
 		//Deal with changing the player in the Roster.
 		//if(theMarket.unpack(in).type == 0)
@@ -115,54 +107,36 @@ public class SS_GameEngine
 		////0 is fuel
 		//}
 	}
-
+	
 	private void processSellRequest(ServerMessage in)
 	{
-
+	
 	}
-
+	
 	private void processShipUpgrade(ServerMessage in)
 	{
-
-		ClientInfo temp = roster.getPlayers().get(in.getOwner());
+	
+		ClientInfo temp = roster.getThreads().get(in.getOwner()).getClientInfo();
 		//		temp.getShipStats().unpack(in.getMessage());
 		//		roster.getPlayer(in.getWho()).getShipStats().unpack(in.getMessage());
 		//Take care of cost.
 	}
-
+	
 	private void processTechnologyUpgrade(ServerMessage in)
 	{
-		roster.getPlayers().get(in.getOwner()).getStats().unpack(in.getMessage());
+	
+		roster.getThreads().get(in.getOwner()).getClientInfo().getStats().unpack(in.getMessage());
 	}
-
+	
 	private void processNewAlliance(ServerMessage in)
 	{
+	
 		//alliances not implemented yet
 	}
-
-	public void processNewLogin(ServerMessage in)
-	{
-		int who = in.getOwner();
-		String message = in.getMessage();
-
-		System.out.println("Processing new Login! - " + message);
-
-		ClientInfo newPlayer = new ClientInfo();
-		newPlayer.setName(message.substring(5));
-		newPlayer.setID(roster.getPlayers().size());
-		newPlayer.setMarket(theMarket);
-		newPlayer.setUniverse(theUniverse);
-		PlayerStats newstats = new PlayerStats();
-		newPlayer.setPlayerStats(newstats);
-
-		roster.addPlayer(newPlayer);
-		startUpPlayerGeneration(who);
-
-		System.out.println("Done with new Login.  New Roster Size = " + roster.getPlayers().size());
-	}
-
+	
 	private void updateSupplies()
 	{
+	
 		for(int a = 0; a < theUniverse.getSectorWidth(); a++)
 		{
 			for(int b = 0; b < theUniverse.getSectorHeight(); b++)
@@ -170,7 +144,7 @@ public class SS_GameEngine
 				for(Planet v : theUniverse.getSectors()[a][b].getPlanets())
 				{
 					int playerID = v.getOwnerID();
-					PlayerStats player = roster.getPlayers().get(playerID).getStats();
+					PlayerStats player = roster.getThreads().get(playerID).getClientInfo().getStats();
 					//double materialsZ = ;
 					//double fuelZ = 0;
 					//materialsZ += (player.getTechnology().getMineSpeed() * .05 + .2) * v.getMat();
@@ -181,12 +155,12 @@ public class SS_GameEngine
 			}
 		}
 	}
-
+	
 	private ArrayList calculateScore() {
-
-		for(int p = 0; p < roster.getPlayers().size(); p++)
+	
+		for(int p = 0; p < roster.getThreads().size(); p++)
 		{
-			PlayerStats player = roster.getPlayers().get(p).getStats();
+			PlayerStats player = roster.getThreads().get(p).getClientInfo().getStats();
 			int fuelComp = 0;
 			int materialComp = 0;
 			int planetComp = 0;
@@ -194,10 +168,10 @@ public class SS_GameEngine
 			int techCompShip = 0;
 			int shipComp = 0;
 			int scoredNow = 0;
-
+			
 			materialComp = player.getMat();
 			fuelComp = player.getFuel();
-
+			
 			for(int a = 0; a < theUniverse.getSectorWidth(); a++)
 			{
 				for(int b = 0; b < theUniverse.getSectorHeight(); b++)
@@ -211,13 +185,13 @@ public class SS_GameEngine
 			}
 			techCompPlanet += player.getFuelSpeed();
 			techCompPlanet += player.getMineSpeed();
-
+			
 			techCompShip += player.getStealthStat();
 			techCompShip += player.getSensorsStat();
-
+			
 			// shipComp += theRoster(a).getShips ??!!??
 			scoredNow = materialComp / 100 + fuelComp / 100 + planetComp * 10 + techCompPlanet + techCompShip + shipComp / 20;
-
+			
 			if(scoreBoard.size() < p)
 				scoreBoard.add(p, scoredNow);
 			else
@@ -225,10 +199,10 @@ public class SS_GameEngine
 		}
 		return scoreBoard;
 	}
-
+	
 	public void startUpPlayerGeneration(int playerNum)
 	{
-
+	
 		Random randy = new Random();
 		//player is created
 		int xOne = -500;
@@ -236,7 +210,7 @@ public class SS_GameEngine
 		int max = theUniverse.getSectorWidth() * theUniverse.getSectorHeight() * 2;
 		int counter = 0;
 		int numShips = 15; //change this to be whatever we want.
-
+		
 		do {
 			xOne = randy.nextInt(theUniverse.getSectorWidth());
 			yOne = randy.nextInt(theUniverse.getSectorHeight());
@@ -247,18 +221,18 @@ public class SS_GameEngine
 		//Example: if a sector has two or more planets, the player will only be given one of those
 		//sharing sectors should allow for some more interesting game play
 		while(counter < max && ((theUniverse.getSectors()[xOne][yOne].getPlanets().size() != 0) && theUniverse.getSectors()[xOne][yOne].getPlanets().get(0).getOwnerID() != -1) || (theUniverse.getSectors()[xOne][yOne].getPlanets().size() == 0));
-
+		
 		theUniverse.getSectors()[xOne][yOne].getPlanets().get(0).setNewOwner(playerNum);
-
+		
 		generateStartShips(xOne, yOne, playerNum, numShips);
 	}
-
+	
 	public void generateStartShips(int sectorX, int sectorY, int playerID, int numShips) //Austin
 	{
-
+	
 		Ship ship = new Ship(playerID);
 		theUniverse.getSectors()[sectorX][sectorY].getShips().add(ship);
-
+		
 		//		for(int a = 0; a < theUniverse.getSectorWidth(); a++) {
 		//			for(int b = 0; b < theUniverse.getSectorHeight(); b++) {
 		//				//temp for testing!!!!
@@ -269,8 +243,9 @@ public class SS_GameEngine
 		//			}
 		//		}
 	}
-
+	
 	public void MoveShips() {
+	
 		for(int row = 0; row < theUniverse.getSectorHeight(); row++) {
 			for(int col = 0; col < theUniverse.getSectorWidth(); col++) {
 				//for(int w = 0; w < theUniverse.getSectors()[col][row].getShips().size(); w++) {
@@ -278,31 +253,31 @@ public class SS_GameEngine
 					Ship w = theUniverse.getSectors()[col][row].getShips().get(i);
 					theUniverse.getSectors()[w.getDestination().x][w.getDestination().y].getShips().add(theUniverse.getSectors()[col][row].getShips().remove(i));
 					//should be unnessecary now, leaving in case current code dosent work
-		/*			if(col == w.getDestination().x)
-					{
-						//do nothing
-					}
-					else if(col < w.getDestination().x)
-					{
-						theUniverse.getSectors()[w.getDestination().x][row].getShips().add(theUniverse.getSectors()[col][row].getShips().remove(i));
-					}
-					else
-					{
-						theUniverse.getSectors()[col-1][row].getShips().add(theUniverse.getSectors()[col][row].getShips().remove(i));
-					}
+					/*			if(col == w.getDestination().x)
+								{
+									//do nothing
+								}
+								else if(col < w.getDestination().x)
+								{
+									theUniverse.getSectors()[w.getDestination().x][row].getShips().add(theUniverse.getSectors()[col][row].getShips().remove(i));
+								}
+								else
+								{
+									theUniverse.getSectors()[col-1][row].getShips().add(theUniverse.getSectors()[col][row].getShips().remove(i));
+								}
 
-					if(row == w.getDestination().y)
-					{
-						//do nothing
-					}
-					else if(row < w.getDestination().y)
-					{
-						theUniverse.getSectors()[col][w.getDestination().y].getShips().add(theUniverse.getSectors()[col][row].getShips().remove(i));
-					}
-					else
-					{
-						theUniverse.getSectors()[col][row-1].getShips().add(theUniverse.getSectors()[col][row].getShips().remove(i));
-					}*/
+								if(row == w.getDestination().y)
+								{
+									//do nothing
+								}
+								else if(row < w.getDestination().y)
+								{
+									theUniverse.getSectors()[col][w.getDestination().y].getShips().add(theUniverse.getSectors()[col][row].getShips().remove(i));
+								}
+								else
+								{
+									theUniverse.getSectors()[col][row-1].getShips().add(theUniverse.getSectors()[col][row].getShips().remove(i));
+								}*/
 				}
 			}
 		}

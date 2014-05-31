@@ -6,10 +6,12 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import src.spacegame.CommHandler;
 import src.spacegame.client.gui.GuiDebug;
 import src.spacegame.client.gui.GuiLoadingGame;
 import src.spacegame.client.gui.GuiMainMenu;
 import src.spacegame.server.ServerMain;
+import src.spacegame.server.ServerRoster;
 import com.arcadeengine.AnimPanel;
 import com.arcadeengine.KeyBinding;
 
@@ -23,10 +25,11 @@ public class ClientMain extends AnimPanel {
 	
 	private ServerMain locServer;
 
+	private ClientRoster clRoster;
 	private ClientInfo clInfo;
-	private ClientComm clComm;
+	private CommHandler clComm;
 	
-	private boolean serverRunning = false, requestSent = true;
+	private boolean serverRunning = false;
 	
 	public ClientMain() {
 	
@@ -44,6 +47,8 @@ public class ClientMain extends AnimPanel {
 		this.getGuiHandler().setDebugState(true);
 		
 		clInfo = new ClientInfo(ClientMain.this);
+		clComm = new CommHandler();
+		clRoster = new ClientRoster();
 	}
 
 	@Override
@@ -70,9 +75,14 @@ public class ClientMain extends AnimPanel {
 		return clInfo;
 	}
 	
-	public ClientComm getClientComm() {
+	public CommHandler getClientComm() {
 	
 		return clComm;
+	}
+	
+	public ClientRoster getClientRoster() {
+
+		return clRoster;
 	}
 	
 	public void connectToServer(final String ipAddress) {
@@ -90,8 +100,8 @@ public class ClientMain extends AnimPanel {
 				
 				try {
 					Socket socket = new Socket(ipAddress, 4444);
-					ClientMain.this.clComm = new ClientComm(ClientMain.this, socket);
-					ClientMain.this.clInfo.init();
+					ClientMain.this.clComm = new CommHandler(socket);
+					ClientMain.this.clComm.sendMessage("LOGI" + "." + ClientMain.this.clInfo.getName());
 
 					ClientMain.this.getGuiHandler().switchGui(new GuiLoadingGame(ClientMain.this));
 				}
@@ -166,24 +176,25 @@ public class ClientMain extends AnimPanel {
 	@Override
 	public void process() {
 	
-		if(System.currentTimeMillis() % UPDATE_DELAY == 0 && clComm != null) {
+		if(System.currentTimeMillis() % UPDATE_DELAY == 0) {
 			if(clComm.isConnected()) {
 
-				if(!requestSent) {
-					clComm.addMessage("REQU");
-					requestSent = true;
-				}
-				
 				clComm.sendMessages();
 				ArrayList<String> msgs = clComm.getAllMessages();
 				
 				for(String msg : msgs) {
 					String header = msg.substring(0, 4);
 					
-					if(header.equals(ClientInfo.getHeader()))
+					if(header.equals(ClientInfo.getHeader())) {
 						clInfo.unpack(msg);
-
-					requestSent = false;
+						System.out.println("Received ClientInfo");
+						clComm.addMessage("REQU");
+					}
+					else if(header.equals(ServerRoster.getHeader())) {
+						clRoster.unpack(msg);
+						System.out.println("Received Roster");
+					}
+					
 				}
 			}
 		}

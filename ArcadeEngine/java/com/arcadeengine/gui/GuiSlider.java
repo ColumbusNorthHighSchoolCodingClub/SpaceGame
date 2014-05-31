@@ -7,9 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
-
+import java.util.ArrayList;
 import com.arcadeengine.AnimPanel;
 import com.arcadeengine.ResourceUtil;
 
@@ -23,7 +22,7 @@ public class GuiSlider extends GuiComponent {
 
 	/**
 	 * Creates a slider with a specific coordinate.
-	 * 
+	 *
 	 * @param x
 	 *            x Coord of the slider.
 	 * @param y
@@ -42,15 +41,16 @@ public class GuiSlider extends GuiComponent {
 	 *            Label of the slider.
 	 */
 	public GuiSlider(AnimPanel panel, String label, double x, int y, double w, int h, double startValue, double valueLimit, boolean snap) {
+
 		super(panel, label, (int) x, y, (int) w, h);
 
 		this.valueLimit = valueLimit;
 
 		this.scale = (w - 24) / this.valueLimit;
 
-		if (startValue < 0)
+		if(startValue < 0)
 			this.value = 0;
-		else if (startValue > this.valueLimit)
+		else if(startValue > this.valueLimit)
 			this.value = this.valueLimit;
 		else
 			this.value = startValue;
@@ -66,7 +66,7 @@ public class GuiSlider extends GuiComponent {
 
 	/**
 	 * Creates a slider that will be auto-placed.
-	 * 
+	 *
 	 * @param w
 	 *            Width of the slider.
 	 * @param h
@@ -80,16 +80,17 @@ public class GuiSlider extends GuiComponent {
 	 * @param l
 	 *            Label of the slider.
 	 */
-	public GuiSlider(AnimPanel panel, double w, int h, double startValue, double valueLimit, boolean snap, String l) {
+	public GuiSlider(AnimPanel panel, String l, double w, int h, double startValue, double valueLimit, boolean snap) {
+
 		super(panel, l, (int) w, h);
 
 		this.valueLimit = valueLimit;
 
 		this.scale = (w - 24) / this.valueLimit;
 
-		if (startValue < 0)
+		if(startValue < 0)
 			this.value = 0;
-		else if (startValue > this.valueLimit)
+		else if(startValue > this.valueLimit)
 			this.value = this.valueLimit;
 		else
 			this.value = startValue;
@@ -107,6 +108,7 @@ public class GuiSlider extends GuiComponent {
 	 * Returns the current value of the slider.
 	 */
 	public double getValue() {
+
 		return value;
 	}
 
@@ -114,74 +116,21 @@ public class GuiSlider extends GuiComponent {
 	 * Sets the current value of the slider to the give double.
 	 */
 	public void setValue(double value) {
+
 		this.value = value;
 	}
 
 	@Override
 	public void draw(Graphics g) {
+
 		Graphics2D page = (Graphics2D) g;
 
-		this.handle.setLocation((int) (bar.x + (this.value * scale)), bar.y);
-
-		page.setColor(secColor);
-
-		page.fill(this.boxOutline);
-
-		if (isEnabled())
-			page.setColor(primColor);
-		if (!isEnabled())
-			page.setColor(disabledColor);
-
-		page.fill(this.boxFill);
-
-		page.setColor(new Color(99, 130, 191));
-
-		page.fill(this.bar);
-
-		int tempx = bar.x, tempy = bar.y;
-
-		this.bar.setLocation(bar.x + 15, bar.y);
-
-		page.fill(this.bar);
-
-		this.bar.setLocation(tempx, tempy);
-
-		page.drawImage(handleImage, handle.x, handle.y, null);
-
-		page.setColor(this.secColor);
-
-		Font font = new Font("Arial", Font.BOLD, 14);
-		Font old = g.getFont();
-		g.setFont(font);
-
-		page.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-
-		String str = label + ": " + value;
-
-		Rectangle2D rect = page.getFontMetrics().getStringBounds(str, page);
-
-		int drawX = (this.boxOutline.width / 2 + this.boxOutline.x) - (int) rect.getWidth() / 2;
-		int drawY = this.boxOutline.y + this.boxOutline.height - 5;
-
-		int shad = 1;
-
-		g.setColor(secColor);
-		g.drawString(label, drawX, drawY);
-
-		g.drawString(label, drawX + 2, drawY);
-
-		g.drawString(label, drawX + 2, drawY + 2);
-
-		g.drawString(label, drawX, drawY + 2);
-
-		g.setColor(primColor.brighter());
-		g.drawString(label, drawX + shad, drawY + shad);
-
-		page.setFont(old);
+		this.draw(boxOutline.x, boxOutline.y, g);
 	}
 
 	@Override
 	public void draw(int x, int y, Graphics g) {
+
 		Graphics2D page = (Graphics2D) g;
 
 		this.bar.setLocation(x + 4, y + 8);
@@ -196,9 +145,9 @@ public class GuiSlider extends GuiComponent {
 
 		page.fill(this.boxOutline);
 
-		if (isEnabled())
+		if(isEnabled())
 			page.setColor(primColor);
-		if (!isEnabled())
+		if(!isEnabled())
 			page.setColor(disabledColor);
 
 		page.fill(this.boxFill);
@@ -221,7 +170,27 @@ public class GuiSlider extends GuiComponent {
 		Font old = g.getFont();
 		g.setFont(font);
 
-		String str = label + ": " + value;
+		String val = "" + value;
+		
+		ArrayList<Character> chars = new ArrayList<Character>();
+		
+		for(int loop = 0; loop < val.length(); loop++) {
+			
+			Character ch = val.toCharArray()[loop];
+			if(ch.equals('.')) {
+				
+				chars.add('.');
+				chars.add(val.toCharArray()[loop + 1]);
+				break;
+			}
+			else
+				chars.add(ch);
+		}
+		
+		String str = label + ": ";
+		
+		for(Character ch : chars)
+			str += ch;
 
 		Rectangle2D rect = page.getFontMetrics().getStringBounds(str, page);
 
@@ -258,19 +227,19 @@ public class GuiSlider extends GuiComponent {
 	@Override
 	public void update() {
 
-		if (isHovered() && panel.isLeftClickHeld()) {
+		if(isHovered() && panel.isLeftClickHeld()) {
 
 			Point point = this.panel.getMousePosition();
 
 			int x = point.x - this.handleImage.getWidth(null) / 2;
 
-			if (x < bar.x || ((x - bar.x) / scale) < 0)
+			if(x < bar.x || ((x - bar.x) / scale) < 0)
 				this.value = 0;
 
-			else if (x > bar.x + bar.width || ((x - bar.x) / scale) > valueLimit)
+			else if(x > bar.x + bar.width || ((x - bar.x) / scale) > valueLimit)
 				this.value = this.valueLimit;
 
-			else if (snap)
+			else if(snap)
 				this.value = (int) ((x - bar.x) / scale);
 
 			else
@@ -281,14 +250,16 @@ public class GuiSlider extends GuiComponent {
 
 	@Override
 	public boolean isHovered() {
+
 		Point point = this.panel.getMousePosition();
 		Rectangle mouse;
 		try {
 			mouse = new Rectangle(point.x - 2, point.y - 2, 4, 4);
 
-			if (mouse.intersects(boxOutline) && this.isEnabled())
+			if(mouse.intersects(boxOutline) && this.isEnabled())
 				return true;
-		} catch (NullPointerException e) {
+		}
+		catch(NullPointerException e) {
 			e.printStackTrace();
 		}
 

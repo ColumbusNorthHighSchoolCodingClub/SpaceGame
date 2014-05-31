@@ -62,11 +62,6 @@ public class ClientInfo implements Packable {
 		myIP = addr.getHostAddress();
 	}
 	
-	public void init() throws UnknownHostException {
-	
-		this.clMain.getClientComm().addMessage("LOGI" + PARSE_CHAR + clName);
-	}
-
 	public static String getHeader() {
 
 		return HEADER_CLASS;

@@ -19,25 +19,17 @@ public class ServerMain implements ActionListener //The Server-side main (MULTI_
 	private final int UPDATE_DELAY_IN_MSEC = 8000; //delay in mSec (60000)
 	SS_GameEngine engine = new SS_GameEngine();
 	ServerSocket sendSocket;
-	
-	public void main(String[] args) throws IOException
-	{
 
-		System.out.println("Starting up server...");
-		ServerMain joe = new ServerMain();
-		joe.runServer();
-	}
-	
 	public void runServer() throws IOException
 	{
-
+	
 		engine.initializeGame();
 		System.out.println("Universe and game initialized...");
 		initTimer();
 		System.out.println("Game Timer initialized...");
 		ServerSocket sendSocket = null;
 		boolean listening = true;
-		
+
 		try //Declare and establish the Server Socket...
 		{
 			sendSocket = new ServerSocket(4444);
@@ -47,26 +39,27 @@ public class ServerMain implements ActionListener //The Server-side main (MULTI_
 			System.err.println("Could not listen on port: 4444. or 4445.?");
 			System.exit(-1);
 		}
-
+		
 		while(listening) //Create a new thread whenever someone tries to connect...
 		{
-			new SS_Thread(sendSocket.accept(), engine).start();
+			SS_Thread th = new SS_Thread(sendSocket.accept(), engine);
+			engine.getRoster().addThread(th);
 		}
-
+		
 		sendSocket.close(); //Clean things up by closing socket.
 	}
-	
+
 	private void initTimer() //Set up a timer that calls this object's action handler.
 	{
-
+	
 		timer = new Timer(UPDATE_DELAY_IN_MSEC, this);
 		timer.setInitialDelay(0);
 		timer.setCoalesce(true);
 		timer.start();
 	}
-	
-	public void stop() {
 
+	public void stop() {
+	
 		this.timer.stop();
 		try {
 			sendSocket.close();
@@ -76,11 +69,11 @@ public class ServerMain implements ActionListener //The Server-side main (MULTI_
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) //--SEND/GET UPDATE(s) FROM SERVER--
 	{ //Called whenever timer goes off (every 60 sec.)
-
+	
 		System.out.println("Processing the Server InBox (Timer event) ");
 		engine.processInbox();
 	}
