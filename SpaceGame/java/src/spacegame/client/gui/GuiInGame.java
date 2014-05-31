@@ -9,6 +9,7 @@ import java.awt.geom.Rectangle2D;
 import src.spacegame.Planet;
 import src.spacegame.Sector;
 import src.spacegame.Universe;
+import src.spacegame.client.ClientInfo;
 import src.spacegame.client.ClientMain;
 import com.arcadeengine.AnimPanel;
 import com.arcadeengine.gui.Gui;
@@ -19,7 +20,7 @@ public class GuiInGame extends Gui {
 	
 	ClientMain clMain = (ClientMain) panel;
 	
-	private GuiSlider scaler = new GuiSlider(panel, "Scale Universe", 150, 45, 0, 10, false);
+	private GuiSlider scaler = new GuiSlider(panel, "Universe Scale", 150, 40, 0, 10, false);
 
 	public GuiInGame(AnimPanel panel) {
 	
@@ -36,22 +37,11 @@ public class GuiInGame extends Gui {
 		g.setColor(new Color(10, 10, 45));
 		g.fillRect(0, 0, clMain.getWidth(), clMain.getHeight());
 		
-		g.setColor(new Color(90, 90, 90, 150));
-		g.fillRect(0, 0, clMain.getWidth(), 40);
-
-		Font font = new Font("Tw Cen MT Condensed Extra Bold", Font.PLAIN, 22);
-		
-		g.setFont(font);
-		
-		String plyName = "Player: " + clMain.getClientInfo().getName();
-
-		Rectangle2D rect = g.getFontMetrics().getStringBounds(plyName, g);
-		
-		this.drawString(plyName, font, Color.white, 5, (int) rect.getHeight() - 2, g);
-
 		this.drawUniverse(g);
-		
-		this.drawComponents(g, (panel.getWidth()) - 300, 5);
+
+		this.drawInterface(g);
+
+		this.drawComponents(g, (panel.getWidth()) - 300, 0);
 	}
 
 	public void drawUniverse(Graphics g) {
@@ -86,6 +76,29 @@ public class GuiInGame extends Gui {
 		}
 	}
 	
+	public void drawInterface(Graphics g) {
+	
+		g.setColor(new Color(90, 90, 90, 150));
+		g.fillRect(0, 0, clMain.getWidth(), 40);
+		g.fillRect(clMain.getWidth() - 100, 40, 100, clMain.getHeight() - 40);
+
+		g.setFont(new Font("Verdana", Font.BOLD, 10));
+
+		int y = 55;
+		for(ClientInfo info : clMain.getClientRoster().getPlayers()) {
+
+			String name = info.getName();
+			if(info.getID() == clMain.getClientInfo().getID())
+				name += " (You)";
+
+			Rectangle2D rect = g.getFontMetrics().getStringBounds(name, g);
+
+			this.drawString(name, g.getFont(), Color.WHITE, (int) (clMain.getWidth() - rect.getWidth() - 2), y, g);
+
+			y += rect.getHeight() + 2;
+		}
+	}
+
 	@Override
 	public void updateGui() {
 	

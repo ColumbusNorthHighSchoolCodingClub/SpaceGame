@@ -10,6 +10,11 @@ import src.spacegame.PlayerStats;
 import src.spacegame.Ship;
 import src.spacegame.Universe;
 
+/**
+ * A class to store all information needed for the client.
+ *
+ * @author David Baker
+ */
 public class ClientInfo implements Packable {
 
 	private static final String HEADER_CLASS = "CNFO";

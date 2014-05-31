@@ -7,6 +7,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * Handles the communication Between a Client and a Server (and vice/versa).
+ *
+ * @author David Baker
+ */
 public class CommHandler {
 	
 	private Socket socket;
@@ -30,11 +35,18 @@ public class CommHandler {
 		connected = true;
 	}
 	
+	/**
+	 * Creates a CommHandler ready to connect to a server.
+	 */
 	public CommHandler() {
 	
 		outBox = new ArrayList<String>();
 	}
 
+	/**
+	 * Connects to the given Server Socket
+	 * @param socket Socket of the Server
+	 */
 	public void connect(Socket socket) {
 	
 		this.socket = socket;
@@ -48,6 +60,10 @@ public class CommHandler {
 		
 	}
 
+	/**
+	 * Whether the object is connected to a server.
+	 * @return Is Connected to a Server
+	 */
 	public boolean isConnected() {
 	
 		return connected;

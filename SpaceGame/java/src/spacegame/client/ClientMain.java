@@ -31,7 +31,7 @@ public class ClientMain extends AnimPanel {
 
 	public ClientMain() {
 
-		this.createInstance("Space Game", 800, 500);
+		this.createInstance("Space Game", 900, 500);
 		this.setResizable(false);
 
 		this.setTimerDelay(60);
@@ -83,24 +83,48 @@ public class ClientMain extends AnimPanel {
 		return clRoster;
 	}
 
+	/**
+	 * Makes an attempt to connect to the given IP Address.
+	 * @param ipAddress IP Address of the Server
+	 */
 	public void connectToServer(final String ipAddress) {
-	
+
+		//Create a Thread so that Connecting to the Server Doesn't Stop the Main Process
 		Thread sv = new Thread() {
 
 			@Override
 			public void run() {
 			
-				if(ipAddress.length() - ipAddress.replace(".", "").length() != 3) {
+				//Removes all periods.
+				String temp = ipAddress.replace(".", "");
+
+				//The String temp should contain a real number, if it doesn't, tell the client.
+				try {
+					Integer i = (Integer.parseInt(temp));
+				}
+				catch(NumberFormatException e) {
 					
 					JOptionPane.showMessageDialog(null, "Invalid Address Given!");
+					this.interrupt();
+					return;
+				}
+				
+				//The String temp should contain 3 periods, so the the original length minus
+				//temp's length has to equal 3. If not, stop and tell the client.
+				if((ipAddress.length() - temp.length() != 3)) {
+					JOptionPane.showMessageDialog(null, "Invalid Address Given!");
+					this.interrupt();
 					return;
 				}
 
+				//The given String is proven to be an address with correct syntax,
+				//try to make a connection and tell the user if it can't.
 				try {
 					Socket socket = new Socket(ipAddress, 4444);
 					ClientMain.this.clComm = new CommHandler(socket);
 					ClientMain.this.clComm.sendMessage("LOGI" + "." + ClientMain.this.clInfo.getName());
 					
+					//If this is able to run, then a connection to the server was made.
 					ClientMain.this.getGuiHandler().switchGui(new GuiLoadingGame(ClientMain.this));
 				}
 				catch(UnknownHostException e) {
@@ -112,18 +136,25 @@ public class ClientMain extends AnimPanel {
 					System.err.println("IOException in method connectToServer in class ClientMain");
 				}
 
+				//We're done here. Stop the thread.
 				this.interrupt();
 			}
 		};
 		
 		sv.start();
 	}
-
+	
+	/**
+	 * Prompts the client to enter a valid IP Address.
+	 */
 	public void connectToServer() {
 	
 		connectToServer(JOptionPane.showInputDialog("Please enter the Server IP address", ""));
 	}
 
+	/**
+	 * Safely starts a local server.
+	 */
 	public void startServer() {
 	
 		if(serverRunning == false) {
@@ -149,6 +180,9 @@ public class ClientMain extends AnimPanel {
 		}
 	}
 
+	/**
+	 * Stops the local server if exists.
+	 */
 	public void stopServer() {
 	
 		if(this.serverRunning)
@@ -157,6 +191,10 @@ public class ClientMain extends AnimPanel {
 		this.serverRunning = false;
 	}
 
+	/**
+	 * Sees if the local server is running or not.
+	 * @return true if a local server is running
+	 */
 	public boolean isServerRunning() {
 	
 		return serverRunning;
@@ -189,7 +227,6 @@ public class ClientMain extends AnimPanel {
 					clRoster.unpack(msg);
 			}
 		}
-		
 		this.updateGui();
 	}
 

@@ -2,12 +2,16 @@ package src.spacegame;
 
 import java.util.ArrayList;
 
+/**
+ *A class to store information specifically about the player in the game.
+ *
+ * @author David
+ */
 public class PlayerStats implements Packable {
 	
 	private static final String HEADER_CLASS = "STAT";
 	
 	private final char PARSE_CHAR = '*';
-	
 	private final String headerFuelPurch = "FPUR",
 			headerMatPurch = "MPUR",
 			headerFuelSold = "FSLD",
@@ -20,12 +24,8 @@ public class PlayerStats implements Packable {
 			headerMat = "MATS",
 			headerMoney = "CASH";
 
-	//TODO: Home Planet
-
 	private int fuelPurchased = 0, matPurchased = 0, fuelSold = 0, matSold = 0;
-
 	private int fuelSpeed = 1, miningSpeed = 1, stealthStat = 1, sensorStat = 1;
-
 	private int myFuel = -1, myMat = -1, myMoney = -1;
 
 	public PlayerStats() {
@@ -33,7 +33,7 @@ public class PlayerStats implements Packable {
 	}
 	
 	public static String getHeader() {
-		
+
 		return HEADER_CLASS;
 	}
 	

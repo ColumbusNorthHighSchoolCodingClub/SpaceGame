@@ -3,6 +3,12 @@ package src.spacegame;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Sector can contain up to 3 planets, and keeps track of the number
+ * of ships inside of it.
+ *
+ * @author David Baker
+ */
 public class Sector implements Packable {
 	
 	//XXX: Packing and unPacking Validated
@@ -18,6 +24,12 @@ public class Sector implements Packable {
 	
 	private int locX, locY;
 	
+	/**
+	 * Creates a Randomly Generated Sector and Stores its X and Y Coordinates.
+	 *
+	 * @param locX X Coordinate
+	 * @param locY Y Coordinate
+	 */
 	public Sector(int locX, int locY) {
 	
 		this();
@@ -33,12 +45,19 @@ public class Sector implements Packable {
 		
 	}
 	
+	/**
+	 * Creates a Sector from the Given data to unpack.
+	 * @param data Data to create the sector from
+	 */
 	public Sector(String data) {
 	
 		this();
 		this.unpack(data);
 	}
 	
+	/**
+	 * Creates a placeholder Sector ready to unpack data.
+	 */
 	public Sector() {
 
 		planets = new ArrayList<Planet>();
