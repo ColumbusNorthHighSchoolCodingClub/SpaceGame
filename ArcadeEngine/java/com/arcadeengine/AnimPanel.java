@@ -9,6 +9,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import javax.swing.JPanel;
 import com.arcadeengine.gui.Gui;
 import com.arcadeengine.gui.GuiHandler;
@@ -20,7 +22,7 @@ import com.arcadeengine.gui.GuiHandler;
  * @version 2.1.1
  */
 @SuppressWarnings("serial")
-public abstract class AnimPanel extends JPanel implements KeyListener, MouseListener, MouseMotionListener {
+public abstract class AnimPanel extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	// Variables
 	private String myName;
 	
@@ -29,6 +31,8 @@ public abstract class AnimPanel extends JPanel implements KeyListener, MouseList
 	private int FPS = 0;
 	private long nextFPSTime = 0;
 	private int fpsLoop = 0;
+	
+	private double scrollAmount = 0;
 	
 	private int frameNumber;
 	
@@ -84,13 +88,13 @@ public abstract class AnimPanel extends JPanel implements KeyListener, MouseList
 		this.myName = name;
 		
 		setPreferredSize(new Dimension(width, height));
-		// this.setSize(new Dimension(width,height));
-		// this.setLocation(80, 80); // move to the right
+		setTimerDelay(60);
 		setVisible(true); // make it visible to the user
 		setFocusable(true);
 		addKeyListener(this);
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		addMouseWheelListener(this);
 		
 		// ---LOAD ALL RESOURCES---
 		initRes();
@@ -295,6 +299,17 @@ public abstract class AnimPanel extends JPanel implements KeyListener, MouseList
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 	
+	}
+	
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+
+		this.getGuiHandler().getCurrentGui().onMouseScroll(e);
+	}
+	
+	public double getScrollAmount() {
+
+		return scrollAmount;
 	}
 	
 	@Override

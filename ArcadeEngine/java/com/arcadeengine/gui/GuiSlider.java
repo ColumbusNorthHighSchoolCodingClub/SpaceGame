@@ -117,7 +117,17 @@ public class GuiSlider extends GuiComponent {
 	 */
 	public void setValue(double value) {
 
-		this.value = value;
+		if(value < 0)
+			this.value = 0;
+		else if(value > this.valueLimit)
+			this.value = valueLimit;
+		else
+			this.value = value;
+	}
+
+	public double getMaxValue() {
+	
+		return valueLimit;
 	}
 
 	@Override
@@ -151,15 +161,11 @@ public class GuiSlider extends GuiComponent {
 		page.fill(this.boxFill);
 
 		page.setColor(new Color(99, 130, 191));
-
-		page.fill(this.bar);
-
-		this.bar.setLocation(x + 19, y + 8);
-
-		page.fill(this.bar);
-
-		this.bar.setLocation(x + 4, y + 8);
-
+		
+		Rectangle tempBar = new Rectangle(x + 12, 8, (int) bar.getWidth(), (int) bar.getHeight());
+		
+		page.fill(tempBar);
+		
 		page.drawImage(handleImage, handle.x, handle.y, null);
 
 		page.setColor(this.secColor);
