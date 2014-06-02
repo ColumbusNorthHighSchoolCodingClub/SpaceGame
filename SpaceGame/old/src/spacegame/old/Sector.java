@@ -151,7 +151,7 @@ public class Sector implements Packable {
 		return Color.GRAY;
 	}
 
-	private final char PARSE_CHAR = '�';
+	private final char PARSE_CHAR = '#';
 
 	/**
 	 * This method packs the data into a String. It loops through the planets and ships and seperates them with a parse char (�).

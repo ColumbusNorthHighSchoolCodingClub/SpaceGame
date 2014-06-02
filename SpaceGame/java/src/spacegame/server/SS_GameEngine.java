@@ -33,16 +33,30 @@ public class SS_GameEngine
 		theMarket = new Market();
 	}
 	
+	/**
+	 * Add to new message to the server inbox to be processed
+	 * @param msg The message being added to the inbox
+	 * @param from the sender of the message
+	 */
 	public void addToInbox(String msg, int from) {
 	
 		inbox.add(new ServerMessage(msg, from));
 	}
 	
+	/**
+	 * returns the Roster used by the game engine
+	 * @return the game engine's Roster
+	 */
 	public ServerRoster getRoster()
 	{
 	
 		return roster;
 	}
+	
+	/**
+	 * returns the Universe used by the game engine
+	 * @return the game engine's Universe
+	 */
 	
 	public Universe getUniverse()
 	{
@@ -50,12 +64,21 @@ public class SS_GameEngine
 		return theUniverse;
 	}
 	
+	/**
+	 * returns the Market used by the game engine
+	 * @return the game engine's Market
+	 */
 	public Market getMarket()
 	{
 	
 		return theMarket;
 	}
 	
+	/**
+	 * Processes the game engines inbox. Messages entail actions that the engine needs to process,
+	 * like moving ships or selling materials. Currently, the inbox is processed at the of every turn, which
+	 * is triggered on a timer.
+	 */
 	public void processInbox()
 	{
 
@@ -252,7 +275,7 @@ public class SS_GameEngine
 				for(int i = 0; i <= theUniverse.getSectors()[col][row].getShips().size(); i++) {
 					Ship w = theUniverse.getSectors()[col][row].getShips().get(i);
 					theUniverse.getSectors()[w.getDestination().x][w.getDestination().y].getShips().add(theUniverse.getSectors()[col][row].getShips().remove(i));
-					//should be unnessecary now, leaving in case current code dosent work
+					//should be unnecessary now, leaving in case current code doesn't work
 					/*			if(col == w.getDestination().x)
 								{
 									//do nothing
