@@ -98,8 +98,8 @@ public class Universe implements Packable {
 
 		ArrayList<String> parse = ParseUtil.parseString(data, PARSE_CHAR);
 		
-		/*if(!parse.get(0).equals(HEADER_CLASS))
-			return;*/
+		if(!parse.get(0).equals(HEADER_CLASS))
+			return;
 		
 		for(String str : parse) {
 			String header = str.substring(0, 4), info = str.substring(4);
@@ -111,10 +111,15 @@ public class Universe implements Packable {
 			else if(header.equals(Sector.getHeader())) {
 				Sector temp = new Sector(str);
 				
-				try {
-					sectors[temp.getLocX()][temp.getLocY()] = temp;
+				if(sectors != null) {
+					try {
+						sectors[temp.getLocX()][temp.getLocY()].unpack(str);
+					}
+					catch(NullPointerException e) {
+						sectors[temp.getLocX()][temp.getLocY()] = temp;
+					}
 				}
-				catch(NullPointerException e) {
+				else {
 					sectors = new Sector[SECTOR_WIDTH][SECTOR_HEIGHT];
 					sectors[temp.getLocX()][temp.getLocY()] = temp;
 				}

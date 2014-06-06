@@ -21,9 +21,9 @@ public enum PlanetType {
 	TITAN(0.015D, Color.DARK_GRAY, 0, -40, 5000, 5000),
 	STEALTH(0.030D, new Color(20, 20, 20), 0, -40, 5000, 5000),
 	SPARTAN(0.050D, Color.RED, 0, -40, 5000, 5000),
-	IONIS(0.040D, Color.LIGHT_GRAY, 0, -40, 5000, 5000),
+	IONIS(0.040D, Color.PINK, 0, -40, 5000, 5000),
 	PEYO(0.045D, Color.BLUE, 0, -40, 5000, 5000),
-	RIEHL(0.050D, Color.PINK, 0, -40, 5000, 5000),
+	RIEHL(0.050D, Color.PINK.darker(), 0, -40, 5000, 5000),
 	SARENA(0.250D, Color.ORANGE.darker(), 0, -40, 5000, 5000);
 	
 	private final Color color;

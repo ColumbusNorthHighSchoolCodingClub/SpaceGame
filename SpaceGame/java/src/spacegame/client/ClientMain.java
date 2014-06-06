@@ -56,10 +56,26 @@ public class ClientMain extends AnimPanel {
 		binding = new KeyBinding(this) {
 			
 			@Override
-			public void singleBinding(String key) {
+			public void onPress(String key) {
 
 				if(key.equals("F1"))
 					ClientMain.this.getGuiHandler().invertDebugState();
+				else if(key.equals("Ctrl")) {
+					
+				}
+			}
+			
+			@Override
+			public void onRelease(String key) {
+
+				if(key.equals("Ctrl")) {
+					
+				}
+			}
+			
+			@Override
+			public void whilePressed(String key) {
+			
 			}
 		};
 		

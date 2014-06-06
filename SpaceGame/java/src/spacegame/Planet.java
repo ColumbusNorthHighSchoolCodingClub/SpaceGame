@@ -2,6 +2,8 @@ package src.spacegame;
 
 import java.util.ArrayList;
 import java.util.Random;
+import src.spacegame.client.ClientMain;
+import src.spacegame.client.gui.GuiButtonPlanet;
 
 public class Planet implements Packable {
 	
@@ -20,6 +22,7 @@ public class Planet implements Packable {
 	
 	private int ownerID = -1;
 	private PlanetType myType;
+	private GuiButtonPlanet myButton;
 
 	/**
 	 * Creates a randomly generated planet and owned by the given ownerID
@@ -68,6 +71,11 @@ public class Planet implements Packable {
 
 		return HEADER_CLASS;
 	}
+	
+	public void initButton(ClientMain clMain) {
+
+		this.myButton = new GuiButtonPlanet(clMain, this);
+	}
 
 	public int getOwnerID() {
 
@@ -77,6 +85,11 @@ public class Planet implements Packable {
 	public PlanetType getType() {
 
 		return myType;
+	}
+	
+	public GuiButtonPlanet getButton() {
+
+		return myButton;
 	}
 	
 	public int getOffense() {

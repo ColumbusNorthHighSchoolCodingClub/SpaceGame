@@ -1,7 +1,6 @@
 package src.spacegame;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Sector can contain up to 3 planets, and keeps track of the number
@@ -37,10 +36,8 @@ public class Sector implements Packable {
 		this.locX = locX;
 		this.locY = locY;
 		
-		Random rand = new Random();
-
 		for(int loop = 0; loop < 3; loop++)
-			if(rand.nextInt(20) % 3 == 0)
+			if(Math.random() < 0.35)
 				planets.add(new Planet(-1));
 		
 	}
@@ -125,6 +122,7 @@ public class Sector implements Packable {
 		if(!parse.get(0).equals(HEADER_CLASS))
 			return;
 		
+		boolean addPlanets = planets.isEmpty();
 		int planCount = 0, shipCount = 0;
 		
 		for(String str : parse) {
@@ -135,10 +133,12 @@ public class Sector implements Packable {
 			else if(header.equals(headerLocY))
 				locY = Integer.parseInt(info);
 			else if(header.equals(Planet.getHeader())) {
-				if(!(planCount < planets.size() - 1))
+
+				if(addPlanets)
 					planets.add(new Planet(str));
 				else
 					planets.get(planCount).unpack(str);
+
 				planCount++;
 			}
 			else if(header.equals(Ship.getHeader())) {
