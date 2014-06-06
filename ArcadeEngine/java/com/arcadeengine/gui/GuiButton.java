@@ -1,5 +1,6 @@
 package com.arcadeengine.gui;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -14,6 +15,8 @@ public class GuiButton extends GuiComponent {
 	protected Rectangle buttonShadow;
 	/** The Inner Rectangle of the Button. */
 	protected Rectangle button;
+	
+	protected Color textColor = Color.WHITE;
 	
 	/**
 	 * Creates a Button.
@@ -58,8 +61,16 @@ public class GuiButton extends GuiComponent {
 		this.button = new Rectangle(0 + 2, 0 + 2, w - 4, h - 4);
 	}
 	
-	// End Constructors ------------------------------------------------
+	public void setTextColor(Color color) {
 	
+		this.textColor = color;
+	}
+
+	public Color getTextColor() {
+	
+		return textColor;
+	}
+
 	/**
 	 * Draws the button on to the screen.
 	 *
@@ -80,7 +91,7 @@ public class GuiButton extends GuiComponent {
 		
 		// Highlight the button if hovered.
 		if(hovered) {
-			if(isEnabled() && primColor.getAlpha() != 0)
+			if(isEnabled())
 				page.setColor(primColor.darker());
 		}
 		else {
@@ -104,7 +115,7 @@ public class GuiButton extends GuiComponent {
 		int drawX = (this.button.width / 2 + this.button.x) - (int) rect.getWidth() / 2;
 		int drawY = (this.button.height / 2 + this.button.y) - (int) (rect.getHeight() / 2 + rect.getY());
 		
-		panel.getGuiHandler().getCurrentGui().drawString(label, font, primColor.brighter().brighter(), drawX, drawY, page);
+		panel.getGuiHandler().getCurrentGui().drawString(label, font, textColor, drawX, drawY, page);
 		
 		g.setFont(old);
 	}
@@ -163,16 +174,11 @@ public class GuiButton extends GuiComponent {
 	
 		Point point = this.panel.getMousePosition();
 		
-		Rectangle mouse;
-		try {
-			mouse = new Rectangle(point.x - 2, point.y - 2, 4, 4);
-			
-			if(mouse.intersects(buttonShadow) && isEnabled())
-				return true;
-		}
-		catch(NullPointerException e) {
-		}
-		
+		Rectangle mouse = new Rectangle(point.x - 2, point.y - 2, 4, 4);
+
+		if(mouse.intersects(buttonShadow) && isEnabled())
+			return true;
+
 		return false;
 	}
 }

@@ -2,7 +2,6 @@ package com.arcadeengine.gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
 import com.arcadeengine.AnimPanel;
 
 public abstract class GuiComponent {
@@ -23,6 +22,7 @@ public abstract class GuiComponent {
 	protected int width;
 	
 	protected boolean enabled = true;
+	protected boolean visible = true;
 	protected boolean autoplaced;
 	protected boolean hovered = false;
 	
@@ -76,6 +76,10 @@ public abstract class GuiComponent {
 	public abstract void onHover();
 	
 	public abstract void onHoverLeave();
+
+	public void onClick(int msButton) {
+
+	}
 	
 	/**
 	 * Updates the component every tick
@@ -115,6 +119,11 @@ public abstract class GuiComponent {
 	public int getLocY() {
 	
 		return y;
+	}
+
+	public boolean isVisible() {
+	
+		return this.visible;
 	}
 
 	public void setLocX(int x) {
@@ -184,6 +193,11 @@ public abstract class GuiComponent {
 		this.enabled = enabled;
 	}
 	
+	public void setVisible(boolean isVisible) {
+	
+		this.visible = isVisible;
+	}
+
 	/**
 	 * Returns true if the button is disabled.
 	 */
@@ -192,18 +206,16 @@ public abstract class GuiComponent {
 		return this.enabled;
 	}
 	
-	public void onUpdateDefault(Point mouse) {
+	public void onUpdateDefault() {
 	
 		if(this.isHovered()) {
 			if(this.hovered != true) {
-				
 				this.onHover();
 				this.setHovered(true);
 			}
 		}
 		else {
 			if(this.hovered != false) {
-				
 				this.onHoverLeave();
 				this.setHovered(false);
 			}

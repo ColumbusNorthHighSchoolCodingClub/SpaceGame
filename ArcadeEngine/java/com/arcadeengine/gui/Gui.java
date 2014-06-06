@@ -203,17 +203,17 @@ public abstract class Gui {
 	 * @param g
 	 *            The Graphics object.
 	 */
-	protected void drawString(String str, int x, int y, Graphics g) {
+	public void drawString(String str, int x, int y, Graphics g) {
 	
 		drawString(str, new Font("Arial", Font.BOLD, 12), x, y, g);
 	}
 	
-	protected void drawString(String str, Font font, int x, int y, Graphics g) {
+	public void drawString(String str, Font font, int x, int y, Graphics g) {
 	
 		drawString(str, font, Color.DARK_GRAY, x, y, g);
 	}
 	
-	protected void drawString(String str, Font font, Color color, int x, int y, Graphics g) {
+	public void drawString(String str, Font font, Color color, int x, int y, Graphics g) {
 	
 		Graphics2D page = (Graphics2D) g;
 
@@ -223,13 +223,8 @@ public abstract class Gui {
 		page.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		
 		g.setColor(Color.black);
-		//		g.drawString(str, x, y);
-		//
-		//		g.drawString(str, x + 2, y);
 		
 		g.drawString(str, x + 1, y + 1);
-		
-		//		g.drawString(str, x, y + 2);
 		
 		g.setColor(color);
 		g.drawString(str, x, y);
@@ -251,19 +246,22 @@ public abstract class Gui {
 	 *            Y pos where to start auto placing(vertical downwards) the
 	 *            buttons.
 	 */
-	protected void drawComponents(Graphics g, ArrayList<GuiComponent> buttons, int x, int y) {
+	public void drawComponents(Graphics g, ArrayList<GuiComponent> buttons, int x, int y) {
 	
 		int height = 0;
 		int spacing = 4;
 		
-		for(GuiComponent b : buttons)
-			if(b.autoplaced == false)
-				b.draw(g);
-			else {
-				b.draw(x, y + height, g);
-				
-				height += b.getHeight() + spacing;
+		for(GuiComponent b : buttons) {
+			if(b.isVisible()) {
+				if(b.autoplaced == false)
+					b.draw(g);
+				else {
+					b.draw(x, y + height, g);
+					
+					height += b.getHeight() + spacing;
+				}
 			}
+		}
 	}
 	
 	/**
@@ -280,7 +278,7 @@ public abstract class Gui {
 	 *            Y pos where to start auto placing(vertical downwards) the
 	 *            buttons.
 	 */
-	protected void drawComponents(Graphics g, int x, int y) {
+	public void drawComponents(Graphics g, int x, int y) {
 	
 		this.drawComponents(g, components, x, y);
 	}
@@ -294,8 +292,10 @@ public abstract class Gui {
 	protected void updateComponents(ArrayList<GuiComponent> comps) {
 	
 		for(GuiComponent b : comps) {
-			b.onUpdateDefault(panel.getMousePosition());
-			b.update();
+			if(b.isVisible()) {
+				b.onUpdateDefault();
+				b.update();
+			}
 		}
 	}
 	
@@ -307,7 +307,9 @@ public abstract class Gui {
 	 */
 	protected void updateComponents() {
 	
-		this.updateComponents(components);
+		for(ArrayList<GuiComponent> comps : this.componentArrays)
+			this.updateComponents(comps);
+
 	}
 
 	/**
@@ -336,7 +338,9 @@ public abstract class Gui {
 
 		for(ArrayList<GuiComponent> array : componentArrays) {
 			for(GuiComponent component : array) {
-				if(component.isHovered()) {
+				if(component.isHovered() && component.isVisible()) {
+					
+					component.onClick(btn);
 					actionPerformed(component, btn);
 					return true;
 				}

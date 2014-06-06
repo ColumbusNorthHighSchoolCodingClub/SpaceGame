@@ -32,8 +32,6 @@ public abstract class AnimPanel extends JPanel implements KeyListener, MouseList
 	private long nextFPSTime = 0;
 	private int fpsLoop = 0;
 	
-	private double scrollAmount = 0;
-	
 	private int frameNumber;
 	
 	private Point lastMouseCoord = new Point(-1, -1);
@@ -307,16 +305,10 @@ public abstract class AnimPanel extends JPanel implements KeyListener, MouseList
 		this.getGuiHandler().getCurrentGui().onMouseScroll(e);
 	}
 	
-	public double getScrollAmount() {
-
-		return scrollAmount;
-	}
-	
 	@Override
 	public void keyPressed(KeyEvent e) {
 	
 		String key = KeyEvent.getKeyText(e.getKeyCode());
-		
 		this.kbHandler.runBindings(key);
 	}
 	

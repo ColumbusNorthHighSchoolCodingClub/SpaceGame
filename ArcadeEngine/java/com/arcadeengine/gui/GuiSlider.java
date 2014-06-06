@@ -217,7 +217,7 @@ public class GuiSlider extends GuiComponent {
 	public void onHoverLeave() {
 
 	}
-
+	
 	@Override
 	public void update() {
 

@@ -10,27 +10,33 @@ public class KeyBinding {
 	}
 
 	/**
-	 * Key binding to be fired only once when key is pressed.
+	 * Key binding to be fired upon key being pressed
 	 */
-	public void singleBinding(String key) {
-	}
+	public void onPress(String key) {
 
-	{
+	}
+	
+	/**
+	 * Key binding to be fired upon key being released
+	 */
+	public void onRelease(String key) {
 
 	}
 
 	/**
 	 * Key binding to be fired while key is pressed.
 	 */
-	public void repeatBinding(String key) {
+	public void whilePressed(String key) {
 
 	}
 
 	public AnimPanel getPanel() {
+
 		return panel;
 	}
 
 	public void setPanel(AnimPanel panel) {
+
 		this.panel = panel;
 	}
 }
